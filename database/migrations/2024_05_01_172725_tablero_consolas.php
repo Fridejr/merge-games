@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tablero_consolas', function (Blueprint $table) {
+        Schema::create('tableros_consolas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tablero_id')->constrained();
             $table->foreignId('consola_id')->constrained();
+            $table->integer('posicion')->required();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tablero_consolas');
+        Schema::dropIfExists('tableros_consolas');
     }
 };
