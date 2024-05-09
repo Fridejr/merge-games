@@ -7,4 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::redirect('/', '/admin');
+
 Route::get('/index', [IndexController::class, 'miVista'])->name('index');

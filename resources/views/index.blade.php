@@ -12,9 +12,9 @@
 
     <div class="min-h-screen flex items-center justify-center">
         <div class="bg-white shadow-md rounded p-8">
-            <h1 class="text-2xl mb-4">Grid 4x4</h1>
+            <h1 class="text-2xl mb-4">Merge Games</h1>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grilla grid grid-cols-2 gap-4">
                 @foreach ($tablero->consolas as $consola)
                     <div class="casilla bg-gray-200 p-4 text-center" style="width: 90px; height: 90px; grid-column: {{ $consola->posicion }}">
                         <img src="{{ asset($consola->ruta_imagen) }}" alt="img">
@@ -29,6 +29,9 @@
             <div class="contador">
                 <p>0</p>
             </div>
+            <div class="boton" onclick=pruebas()>
+                pulsar
+            </div>
         </div>
     </div>
 
@@ -37,7 +40,7 @@
         let contador = 0;
         const divContador = document.querySelector('.contador');
         const textoContador = document.querySelector('.contador p');
-        const casillas = document.querySelectorAll('.casilla');
+        const grilla = document.querySelector('.grilla');    
 
         divContador.addEventListener('click', () => {
             if (contador < 10) {
@@ -52,6 +55,8 @@
             } else {
                 contador = 0;
                 textoContador.innerText = '0';
+
+                var casillas = document.querySelectorAll('.casilla');
 
                 var casillasLibres = [];
                 for (var i = 0; i < casillas.length; i++) {
@@ -73,12 +78,18 @@
 
 
         function nuevaConsola() {
+            var casillas = document.querySelectorAll('.casilla');
             var casillasLibres = [];
             for (var i = 0; i < casillas.length; i++) {
                 if (casillas[i].querySelector('img') == null) {
                     casillasLibres.push(casillas[i]);
                 }
             }
+            if (casillas.length > 4) {
+                grilla.classList.remove('grid-cols-2'); // Elimina la clase de 3 columnas si existe
+                grilla.classList.add('grid-cols-3');
+            }
+
             if (casillasLibres.length > 0) {
                 // Obtener un nombre de consola del primer elemento de la lista de consolas de Laravel
                 var imagenConsola = "{{ $tablero->consolas->first()->ruta_imagen }}";
@@ -92,6 +103,13 @@
                 console.log("No hay casillas libres disponibles.");
             }
             
+        }
+
+
+        function pruebas() {
+            contador = 0;
+            textoContador.innerText = contador;
+            grilla.innerHTML += '<div class="casilla bg-gray-200 p-4 text-center" style="width: 90px; height: 90px;"></div>';
         }
 
 
