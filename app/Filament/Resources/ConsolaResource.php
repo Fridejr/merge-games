@@ -17,13 +17,25 @@ class ConsolaResource extends Resource
 {
     protected static ?string $model = Consola::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calculator';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('nombre')
+                    ->label('Nombre')
+                    ->required(),
+                Forms\Components\TextInput::make('descripcion')
+                    ->label('Descripción')
+                    ->required(),     
+                Forms\Components\TextInput::make('ruta_imagen')
+                    ->label('Ruta de la imagen')
+                    ->required(),
                 
+                Forms\Components\TextInput::make('money')
+                    ->label('Dinero generado por 3s')
+                    ->required(),                                
             ]);
     }
 
@@ -31,7 +43,12 @@ class ConsolaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('nombre'),
+                Tables\Columns\TextColumn::make('descripcion'),
+                Tables\Columns\TextColumn::make('ruta_imagen'),
+                Tables\Columns\TextColumn::make('money'),
+                Tables\Columns\TextColumn::make('created_at')
             ])
             ->filters([
                 //
