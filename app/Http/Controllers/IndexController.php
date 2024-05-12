@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tablero;
 use App\Models\TablerosConsolas;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class IndexController extends Controller
 {
@@ -55,20 +56,26 @@ class IndexController extends Controller
         }
     }
 
-    public function añadirPosicionDeConsola(Request $request, $id_consola, $posicion)
+    public function agregarConsola(Request $request)
     {
-        // Obtén el ID del usuario autenticado
-        $userId = Auth::id();
+        try {
+            $userId = Auth::id();
 
-        // Busca el tablero del usuario
-        $tablero = Tablero::where('user_id', $userId)->first();
+            $tablero = Tablero::where('user_id', $userId)->first();
 
-        // Crea una nueva entrada en la tabla intermedia tableros_consolas
-        $tablero->consolas()->attach($id_consola, ['posicion' => $posicion]);
+            if (!$tablero) {
+                return response()->json(['error' => 'Tablero no encontrado para este usuario'], 404);
+            }
 
-        // Si necesitas hacer algo más después de añadir la consola, aquí lo harías
+            $tableroConsola = new TablerosConsolas();
+            $tableroConsola->tablero_id = $tablero->id;
+            $tableroConsola->consola_id = $request->id_consola;
+            $tableroConsola->posicion = $request->posicion;
+            $tableroConsola->save();
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
     }
-        
 }

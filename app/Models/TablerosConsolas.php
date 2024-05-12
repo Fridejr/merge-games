@@ -11,6 +11,8 @@ class TablerosConsolas extends Model
 
     protected $table = 'tableros_consolas';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'tablero_id',
         'consola_id',

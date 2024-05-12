@@ -23,8 +23,6 @@
                             ->first();
                     @endphp
 
-            
-
                     {{-- Verifica si hay una consola en la posición actual --}}
                     @if ($consola)
                         <div class="casilla bg-gray-200 p-4 text-center" style="width: 90px; height: 90px;">
@@ -93,45 +91,40 @@
 
             if (casillasLibres.length > 0) {
                 // Obtener una casilla libre aleatoria del tablero
-                var nuevaConsola = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
+                var nuevaCasilla = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
 
                 // Obtener la imagen de una consola aleatoria
                 var imagenConsola = "{{ $imagenConsola }}";
 
-                // Crear un objeto con los datos a enviar
-                var data = {
-                    id_consola: 1, // Aquí deberías tener la ID de la consola a añadir
-                    posicion: 1 // Aquí deberías tener la posición de la casilla, pero esto debe ajustarse
-                };
+                // Imprimir la imagen de la consola en la casilla elegida al azar
+                nuevaCasilla.innerHTML = "<img src='" + imagenConsola + "' alt='img'>";
 
-                // Configurar la solicitud fetch
-                fetch('/añadir-posicion-consola', {
-                    method: 'POST', // Método de la solicitud
+                // Obtener la posición de la casilla
+                var posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
+                console.log(posicion);
+
+                // Realizar la solicitud AJAX para agregar la consola al tablero
+                fetch('/agregar-consola', {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // Tipo de contenido
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Token CSRF para protección
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify(data) // Convertir el objeto de datos a JSON
+                    body: JSON.stringify({ id_consola: 1, posicion: posicion }) 
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al procesar la solicitud');
-                    }
-                    return response.json(); // Devolver la respuesta en formato JSON
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log(data); // Manejar la respuesta si es necesario
+                    console.log(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
 
-                // Imprimir la imagen de la consola en la casilla elegida al azar
-                nuevaConsola.innerHTML = "<img src='" + imagenConsola + "' alt='img'>";
             } else {
                 console.log("No hay casillas libres disponibles.");
             }
         }
+
 
 
         function pruebas() {

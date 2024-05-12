@@ -11,7 +11,5 @@ Route::redirect('/', '/admin');
 
 Route::get('/index', [IndexController::class, 'miVista'])->name('index');
 Route::get('/incrementar-casillas', [IndexController::class, 'incrementarCasillas']);
-Route::post('/añadir-posicion-consola', [IndexController::class, 'anadirPosicionDeConsola']);
-
-
+Route::post('/agregar-consola', [IndexController::class, 'agregarConsola']);
 
