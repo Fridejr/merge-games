@@ -17,8 +17,16 @@ class IndexController extends Controller
         $userId = Auth::id();
 
         // Obtiene el tablero del jugador autenticado
+        
+        if (!Tablero::where('user_id', $userId)->first()) {
+            // Si no se encuentra el tablero, crea uno nuevo para ese usuario
+            $tablero = new Tablero();
+            $tablero->user_id = $userId;
+            $tablero->save();
+        }
+        
         $tablero = Tablero::where('user_id', $userId)->first();
-
+        
         // Obtiene el número de casillas del tablero del jugador autenticado
         $numeroCasillas = $tablero->n_casillas;
 
