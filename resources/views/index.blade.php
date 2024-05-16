@@ -150,9 +150,64 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+
+
+
+
+        // Variables globales
+        let dragging = false;
+        let draggedElement = null;
+        let originalWidth = null;
+        let originalHeight = null;
+
+
+        // Función para manejar el evento de mousedown
+        document.addEventListener('mousedown', (event) => {
+            if (event.target.tagName === 'IMG') {
+                dragging = true;
+                draggedElement = event.target;
+
+                // Guardar el tamaño original de la imagen
+                originalWidth = draggedElement.width;
+                originalHeight = draggedElement.height;
+
+                // Aplicar estilos para mantener el tamaño original
+                draggedElement.style.width = originalWidth + 'px';
+                draggedElement.style.height = originalHeight + 'px';
+
+                event.preventDefault();
             }
 
-            
+            var coords = [];
+
+            for (var i = 0; i < grilla.children.length; i++) {
+                var casilla = grilla.children[i];
+                var rect = casilla.getBoundingClientRect();
+                var top = rect.top + window.scrollY; // Ajustar posición según el desplazamiento de la ventana
+                coords.push(top);
+            }
+
+
+            console.log(coords);
+        });
+
+        // Función para manejar el evento de mousemove
+        document.addEventListener('mousemove', (event) => {
+            if (dragging && draggedElement) {
+                draggedElement.style.position = 'absolute';
+                draggedElement.style.left = event.pageX - (originalWidth / 2) + 'px';
+                draggedElement.style.top = event.pageY - (originalHeight / 2) + 'px';
+            }
+        });
+
+        // Función para manejar el evento de mouseup
+        document.addEventListener('mouseup', () => {
+            if (dragging) {
+                dragging = false;
+                draggedElement = null;
+            }
+        });
 
     </script>
 </body>
