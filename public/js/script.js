@@ -171,7 +171,7 @@ document.addEventListener('mouseup', (event) => {
 
             if (imagenCasilla && draggedElement.src.toLowerCase() === imagenCasilla.src.toLowerCase()) {
                 // Obtener el ID de la consola actual y la siguiente consola
-                let idConsolaActual = obtenerIdConsola(draggedElement.src.toLowerCase());
+                let idConsolaActual = obtenerIdConsola(imagenCasilla.src.toLowerCase());
                 let idConsolaSiguiente = idConsolaActual + 1;
                 let nuevaImagenSrc = obtenerRutaImagenConsola(idConsolaSiguiente);
 
@@ -179,15 +179,20 @@ document.addEventListener('mouseup', (event) => {
                 divDestino.innerHTML = `<img src="${nuevaImagenSrc}" alt="img">`;
                 divContenedor.innerHTML = '';
 
-                // Enviar la solicitud para actualizar el tablero
-                /* let posicion = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
-                fetch('/actualizar-consola', {
+                // Enviar la solicitud para mezclar consolas
+                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
+                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
+                fetch('/mezclar-consolas', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ id_consola: idConsolaSiguiente, posicion: posicion })
+                    body: JSON.stringify({ 
+                        id_consola_destino: idConsolaSiguiente, 
+                        posicion_origen: posicionOrigen,
+                        posicion_destino: posicionDestino
+                    })
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -200,10 +205,10 @@ document.addEventListener('mouseup', (event) => {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                }); */
+                });
 
                 console.log('Son la misma consola, se combinan y se actualiza a la siguiente consola.');
-            } else {
+            } else if (imagenCasilla) {
                 let imagenOrigen = draggedElement.src;
                 let imagenDestino = imagenCasilla.src;
 
@@ -213,8 +218,68 @@ document.addEventListener('mouseup', (event) => {
                 // Poner la imagen de la casilla destino en la casilla de la consola arrastrada
                 divContenedor.innerHTML = `<img src="${imagenDestino}" alt="img">`;
 
-                console.log('Son distintas consolas');
-                console.log(imagenCasilla.src, draggedElement.src);
+                // Enviar la solicitud para intercambiar consolas
+                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
+                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
+                fetch('/intercambiar-consolas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ 
+                        posicion_origen: posicionOrigen,
+                        posicion_destino: posicionDestino
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                console.log('Son distintas consolas y se intercambian.');
+            } else {
+                // La casilla destino está vacía, mover la consola a esta posición
+                let imagenOrigen = draggedElement.src;
+                divDestino.innerHTML = `<img src="${imagenOrigen}" alt="img">`;
+                divContenedor.innerHTML = '';
+
+                // Enviar la solicitud para actualizar la posición de la consola
+                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
+                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
+                fetch('/actualizar-posicion-consola', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ 
+                        posicion_origen: posicionOrigen,
+                        posicion_destino: posicionDestino
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                console.log('Consola movida a una casilla vacía.');
             }
 
             console.log('El ratón fue soltado en la casilla:', casillaSoltada);

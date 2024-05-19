@@ -86,4 +86,115 @@ class IndexController extends Controller
             return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
         }
     }
+
+    public function mezclarConsolas(Request $request)
+    {
+        try {
+            // Obtén el ID del usuario autenticado
+            $userId = Auth::id();
+
+            // Busca el tablero del usuario
+            $tablero = Tablero::where('user_id', $userId)->first();
+
+            if (!$tablero) {
+                return response()->json(['error' => 'Tablero no encontrado para este usuario'], 404);
+            }
+
+            // Elimina la consola que se arrastra
+            TablerosConsolas::where('tablero_id', $tablero->id)
+                            ->where('posicion', $request->posicion_origen)
+                            ->delete();
+
+            // Actualiza la consola en la posición destino
+            $tableroConsolaDestino = TablerosConsolas::where('tablero_id', $tablero->id)
+                                                     ->where('posicion', $request->posicion_destino)
+                                                     ->first();
+
+            if ($tableroConsolaDestino) {
+                $tableroConsolaDestino->consola_id = $request->id_consola_destino;
+                $tableroConsolaDestino->save();
+            } else {
+                return response()->json(['error' => 'Consola no encontrada en la posición destino especificada'], 404);
+            }
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+    public function intercambiarConsolas(Request $request)
+    {
+        try {
+            // Obtén el ID del usuario autenticado
+            $userId = Auth::id();
+
+            // Busca el tablero del usuario
+            $tablero = Tablero::where('user_id', $userId)->first();
+
+            if (!$tablero) {
+                return response()->json(['error' => 'Tablero no encontrado para este usuario'], 404);
+            }
+
+            // Obtén las consolas en las posiciones de origen y destino
+            $tableroConsolaOrigen = TablerosConsolas::where('tablero_id', $tablero->id)
+                                                    ->where('posicion', $request->posicion_origen)
+                                                    ->first();
+            $tableroConsolaDestino = TablerosConsolas::where('tablero_id', $tablero->id)
+                                                     ->where('posicion', $request->posicion_destino)
+                                                     ->first();
+
+            if ($tableroConsolaOrigen && $tableroConsolaDestino) {
+                // Intercambia las posiciones de las consolas
+                $tempConsolaId = $tableroConsolaOrigen->consola_id;
+                $tableroConsolaOrigen->consola_id = $tableroConsolaDestino->consola_id;
+                $tableroConsolaDestino->consola_id = $tempConsolaId;
+
+                // Guarda los cambios
+                $tableroConsolaOrigen->save();
+                $tableroConsolaDestino->save();
+            } else {
+                return response()->json(['error' => 'Consola no encontrada en una de las posiciones especificadas'], 404);
+            }
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function actualizarPosicionConsola(Request $request)
+    {
+        try {
+            // Obtén el ID del usuario autenticado
+            $userId = Auth::id();
+
+            // Busca el tablero del usuario
+            $tablero = Tablero::where('user_id', $userId)->first();
+
+            if (!$tablero) {
+                return response()->json(['error' => 'Tablero no encontrado para este usuario'], 404);
+            }
+
+            // Actualiza la posición de la consola
+            $tableroConsola = TablerosConsolas::where('tablero_id', $tablero->id)
+                                              ->where('posicion', $request->posicion_origen)
+                                              ->first();
+
+            if ($tableroConsola) {
+                $tableroConsola->posicion = $request->posicion_destino;
+                $tableroConsola->save();
+            } else {
+                return response()->json(['error' => 'Consola no encontrada en la posición de origen especificada'], 404);
+            }
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
+    }
 }

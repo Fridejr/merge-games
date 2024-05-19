@@ -1,0 +1,22 @@
+body {
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@media (max-width: 640px) {
+    .casilla {
+        width: 4rem; /* 64px */
+        height: 4rem; /* 64px */
+        padding: 0.5rem; /* 8px */
+    }
+
+    .contador p {
+        font-size: 1rem; /* 16px */
+    }
+
+    button {
+        padding: 0.5rem 1rem; /* 8px 16px */
+    }
+}

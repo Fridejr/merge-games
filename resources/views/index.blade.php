@@ -6,13 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Merge Games</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    
+<body>
     <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white shadow-md rounded p-8">
-            <h1 class="text-2xl mb-4">Merge Games</h1>
-            <div class="grilla grid grid-cols-4 gap-4">
+        <div class="bg-transparent shadow-md rounded p-4 sm:p-8">
+            <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
+            <div class="grilla grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
                 @for ($i = 1; $i < $numeroCasillas + 1; $i++)
                     @php
                         $consola = $tablero->consolas()
@@ -25,18 +25,18 @@
                     @endphp
 
                     @if ($consola)
-                        <div class="casilla bg-gray-200 p-4 text-center w-24 h-24">
-                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img">
+                        <div class="casilla bg-gray-200 p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">
+                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img" class="w-full h-full object-contain">
                         </div>
                     @else
-                        <div class="casilla bg-gray-200 p-4 text-center w-24 h-24"></div>
+                        <div class="casilla bg-gray-200 p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>
                     @endif
                 @endfor
             </div>
-            <div class="contador mt-4 text-xl">
+            <div class="contador mt-4 text-lg sm:text-xl text-center">
                 <p>0</p>
             </div>
-            <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded" onclick="pruebas()">Pulsar</button>
+            <button class="mt-4 px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded" onclick="pruebas()">Pulsar</button>
         </div>
     </div>
 
