@@ -9,10 +9,21 @@
     <link href="css/index.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="contenedor shadow-md rounded sm:p-8">
+    <div class="bg-blue-500 min-h-screen flex items-center justify-center">
+        <div class="contenedor bg-gray-100 shadow-md rounded sm:p-8">
             <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
-            <div class="grilla grid grid-cols-2 sm:grid-cols-4 sm:gap-4">
+            <div class="grilla grid 
+            @if ($tablero->n_casillas <= 4)
+                grid-cols-2
+            @elseif ($tablero->n_casillas <= 9)
+                grid-cols-3
+            @elseif ($tablero->n_casillas <= 12)
+                grid-cols-4
+            @elseif ($tablero->n_casillas <= 20)
+                grid-cols-5
+            @elseif ($tablero->n_casillas <= 25)
+                grid-cols-6
+            @endif">
                 @for ($i = 1; $i < $numeroCasillas + 1; $i++)
                     @php
                         $consola = $tablero->consolas()
@@ -25,11 +36,11 @@
                     @endphp
 
                     @if ($consola)
-                        <div class="casilla bg-gray-200 p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">
+                        <div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">
                             <img src="{{ asset($consola->ruta_imagen) }}" alt="img" class="w-full h-full object-contain">
                         </div>
                     @else
-                        <div class="casilla bg-gray-200 p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>
+                        <div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>
                     @endif
                 @endfor
             </div>

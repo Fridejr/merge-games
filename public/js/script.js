@@ -96,7 +96,21 @@ function pruebas() {
     contador = 0;
     textoContador.innerText = contador;
 
-    grilla.innerHTML += '<div class="casilla bg-gray-200 p-4 text-center w-24 h-24"></div>';
+    const casillas = grilla.children.length;
+
+    if (casillas == 4) {
+        grilla.classList.add('grid-cols-3');
+    } else if (casillas == 9) {
+        grilla.classList.add('grid-cols-4');
+    } else if (casillas == 12) {
+        grilla.classList.add('grid-cols-5');
+    } else if (casillas == 20) {
+        grilla.classList.add('grid-cols-6');
+    } else if (casillas > 25) {
+        grilla.classList.add('grid-cols-7');
+    }
+
+    grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">';
 
     fetch('/incrementar-casillas')
         .then(response => response.json())

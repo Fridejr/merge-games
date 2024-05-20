@@ -5,18 +5,20 @@
     background-position: center;
 } */
 
-.contenedor {
-    background-image: url('../images/swit.png');
+/* .contenedor {
+    background-image: url('../images/sin\ fondo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 
-    width: 70%;
+    width: 80%;
 }
-
-.grilla {
-    margin-left: 23%;
-    margin-right: 23%;
+ */
+.casilla {
+    background-image: url('../images/casilla-recta.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 @media (max-width: 640px) {
