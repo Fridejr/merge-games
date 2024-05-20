@@ -8,11 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-100">
     <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-transparent shadow-md rounded p-4 sm:p-8">
+        <div class="contenedor shadow-md rounded sm:p-8">
             <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
-            <div class="grilla grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
+            <div class="grilla grid grid-cols-2 sm:grid-cols-4 sm:gap-4">
                 @for ($i = 1; $i < $numeroCasillas + 1; $i++)
                     @php
                         $consola = $tablero->consolas()
