@@ -51,6 +51,11 @@
         </div>
     </div>
 
+    <script>
+        //Exportar el nivel para poder usarlo en el script
+        const nivel = {{ $nivel }};
+    </script>
+
     <script src="js/script.js"></script>
 </body>
 </html>

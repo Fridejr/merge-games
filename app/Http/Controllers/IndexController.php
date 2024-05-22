@@ -6,6 +6,7 @@ use App\Models\Consola;
 use Illuminate\Http\Request;
 use App\Models\Tablero;
 use App\Models\TablerosConsolas;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +40,10 @@ class IndexController extends Controller
         // Obtiene la imagen (ruta_imagen) de la primera consola
         $imagenConsola = Consola::first()->ruta_imagen;
 
-        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola'));
+        //obtiene el nivel del usuario
+        $nivel = Auth::user()->nivel;
+
+        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel'));
     }
 
     public function incrementarCasillas(Request $request)
@@ -193,6 +197,23 @@ class IndexController extends Controller
 
             return response()->json(['success' => true]);
 
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function subirNivel()
+    {
+        try {
+            // Obtén el ID del usuario autenticado
+            $userId = Auth::id();
+
+            // Aumentar el nivel del usuario
+            $user = User::find($userId);
+            $user->nivel += 1;
+            $user->save();
+
+            return response()->json(['success' => true, 'nivel' => $user->nivel]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
         }

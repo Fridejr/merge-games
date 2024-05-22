@@ -21,6 +21,11 @@
     background-position: center;
 }
 
+.contador {
+    user-select: none; /* Desactivar la selección de texto */
+}
+
+
 @media (max-width: 640px) {
     .casilla {
         width: 4rem; /* 64px */

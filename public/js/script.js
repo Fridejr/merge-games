@@ -3,6 +3,9 @@ const divContador = document.querySelector('.contador');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
 
+// Obtener el nivel del usuario que se ha importado desde el archivo .blade
+var nivelUsuario = nivel;
+
 divContador.addEventListener('click', () => {
     if (contador < 10) {
         contador++;
@@ -35,6 +38,11 @@ function obtenerIdConsola(src) {
         "/images/psp.png": 1,
         "/images/gameboy.png": 2,
         "/images/gameboyadvance.png": 3,
+        "/images/play3.png": 4,
+        "/images/nswitch.png": 5,
+        "/images/ds.png": 6,
+        "/images/wii.png": 7,
+        "/images/defect.png": 8,
         // Agrega más rutas de imagen y sus IDs correspondientes
     };
 
@@ -51,6 +59,11 @@ function obtenerRutaImagenConsola(id) {
         1: "/images/psp.png",
         2: "/images/gameboy.png",
         3: "/images/gameboyadvance.png",
+        4: "/images/play3.png",
+        5: "/images/nswitch.png",
+        6: "/images/ds.png",
+        7: "/images/wii.png",
+        8: "/images/defect.png",
         // Agrega más IDs y sus rutas de imagen correspondientes
     };
     return mapaConsolas[id] || "/images/defect.png"; // Devuelve una imagen por defecto si no se encuentra el ID
@@ -92,34 +105,61 @@ function nuevaConsola() {
     }
 }
 
-function pruebas() {
-    contador = 0;
-    textoContador.innerText = contador;
-
+function pruebas(nuevaConsola) {
+    console.log(nuevaConsola);
     const casillas = grilla.children.length;
 
-    if (casillas == 4) {
-        grilla.classList.add('grid-cols-3');
-    } else if (casillas == 9) {
-        grilla.classList.add('grid-cols-4');
-    } else if (casillas == 12) {
-        grilla.classList.add('grid-cols-5');
-    } else if (casillas == 20) {
-        grilla.classList.add('grid-cols-6');
-    } else if (casillas > 25) {
-        grilla.classList.add('grid-cols-7');
-    }
+    if (nuevaConsola > nivelUsuario) {
+        // Actualizar el nivel del usuario
+        nivelUsuario += 1;
 
-    grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">';
-
-    fetch('/incrementar-casillas')
-        .then(response => response.json())
+        fetch('/subir-nivel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log(data);
+            console.log('Nivel del usuario actualizado:', data);
         })
         .catch(error => {
             console.error('Error:', error);
         });
+        
+        // Añadir casillas si es necesario
+        if (nuevaConsola >= 4) {
+            if (casillas == 4) {
+                grilla.classList.add('grid-cols-3');
+            } else if (casillas == 9) {
+                grilla.classList.add('grid-cols-4');
+            } else if (casillas == 12) {
+                grilla.classList.add('grid-cols-5');
+            } else if (casillas == 20) {
+                grilla.classList.add('grid-cols-6');
+            } else if (casillas > 25) {
+                grilla.classList.add('grid-cols-7');
+            }
+
+            grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">';
+    
+            fetch('/incrementar-casillas')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    }
 }
 
 let dragging = false;
@@ -187,12 +227,14 @@ document.addEventListener('mouseup', (event) => {
                 // Obtener el ID de la consola actual y la siguiente consola
                 let idConsolaActual = obtenerIdConsola(imagenCasilla.src.toLowerCase());
                 let idConsolaSiguiente = idConsolaActual + 1;
+                console.log(idConsolaActual, idConsolaSiguiente);
+                    
                 let nuevaImagenSrc = obtenerRutaImagenConsola(idConsolaSiguiente);
-
+                
                 // Actualizar la casilla de destino con la nueva consola
                 divDestino.innerHTML = `<img src="${nuevaImagenSrc}" alt="img">`;
                 divContenedor.innerHTML = '';
-
+                
                 // Enviar la solicitud para mezclar consolas
                 let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
                 let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
@@ -220,8 +262,10 @@ document.addEventListener('mouseup', (event) => {
                 .catch(error => {
                     console.error('Error:', error);
                 });
-
+                
+                pruebas(idConsolaSiguiente);
                 console.log('Son la misma consola, se combinan y se actualiza a la siguiente consola.');
+                
             } else if (imagenCasilla) {
                 let imagenOrigen = draggedElement.src;
                 let imagenDestino = imagenCasilla.src;
