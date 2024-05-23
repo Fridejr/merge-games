@@ -3,10 +3,8 @@ const divContador = document.querySelector('.contador');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
 
-// Obtener el nivel del usuario que se ha importado desde el archivo .blade
-var nivelUsuario = nivel;
-
-divContador.addEventListener('click', () => {
+divContador.addEventListener('click', (event) => {
+    event.preventDefault();
     if (contador < 10) {
         contador++;
         textoContador.innerText = contador;
@@ -20,8 +18,8 @@ setInterval(() => {
         contador = 0;
         textoContador.innerText = '0';
 
-        var casillas = document.querySelectorAll('.casilla');
-        var casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
+        const casillas = document.querySelectorAll('.casilla');
+        const casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
 
         if (casillasLibres.length > 0) {
             nuevaConsola();
@@ -34,51 +32,25 @@ setInterval(() => {
 }, 1000);
 
 function obtenerIdConsola(src) {
-    const mapaConsolas = {
-        "/images/psp.png": 1,
-        "/images/gameboy.png": 2,
-        "/images/gameboyadvance.png": 3,
-        "/images/play3.png": 4,
-        "/images/nswitch.png": 5,
-        "/images/ds.png": 6,
-        "/images/wii.png": 7,
-        "/images/defect.png": 8,
-        // Agrega más rutas de imagen y sus IDs correspondientes
-    };
-
-    // Normaliza la URL para obtener solo la parte del path y a minúsculas
-    const url = new URL(src);
-    const path = url.pathname.toLowerCase();
-
-    console.log(path);
-    return mapaConsolas[path] || 0; // Devuelve 0 si no se encuentra la ruta de imagen
+    const consola = consolas.find(consola => src.endsWith(consola.ruta_imagen));
+    return consola ? consola.id : 0;
 }
 
 function obtenerRutaImagenConsola(id) {
-    const mapaConsolas = {
-        1: "/images/psp.png",
-        2: "/images/gameboy.png",
-        3: "/images/gameboyadvance.png",
-        4: "/images/play3.png",
-        5: "/images/nswitch.png",
-        6: "/images/ds.png",
-        7: "/images/wii.png",
-        8: "/images/defect.png",
-        // Agrega más IDs y sus rutas de imagen correspondientes
-    };
-    return mapaConsolas[id] || "/images/defect.png"; // Devuelve una imagen por defecto si no se encuentra el ID
+    const consola = consolas.find(consola => consola.id === id);
+    return consola ? consola.ruta_imagen : "/images/defect.png";
 }
 
 function nuevaConsola() {
-    var casillas = document.querySelectorAll('.casilla');
-    var casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
+    const casillas = document.querySelectorAll('.casilla');
+    const casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
 
     if (casillasLibres.length > 0) {
-        var nuevaCasilla = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
-        var imagenConsola = obtenerRutaImagenConsola(1); 
+        const nuevaCasilla = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
+        const imagenConsola = obtenerRutaImagenConsola(1);
 
         nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img'>`;
-        var posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
+        const posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
 
         fetch('/agregar-consola', {
             method: 'POST',
@@ -132,7 +104,7 @@ function pruebas(nuevaConsola) {
         .catch(error => {
             console.error('Error:', error);
         });
-        
+
         // Añadir casillas si es necesario
         if (nuevaConsola >= 4) {
             if (casillas == 4) {
@@ -147,8 +119,8 @@ function pruebas(nuevaConsola) {
                 grilla.classList.add('grid-cols-7');
             }
 
-            grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">';
-    
+            grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>';
+
             fetch('/incrementar-casillas')
                 .then(response => response.json())
                 .then(data => {
@@ -158,7 +130,6 @@ function pruebas(nuevaConsola) {
                     console.error('Error:', error);
                 });
         }
-
     }
 }
 
@@ -304,6 +275,7 @@ document.addEventListener('mouseup', (event) => {
                 });
 
                 console.log('Son distintas consolas y se intercambian.');
+                
             } else {
                 // La casilla destino está vacía, mover la consola a esta posición
                 let imagenOrigen = draggedElement.src;
@@ -354,3 +326,29 @@ document.addEventListener('mouseup', (event) => {
         draggedElement = null;
     }
 });
+
+
+function mostrarLogros() {
+    divLogros = document.getElementById('divLogros');
+    divLogros.style.display = 'block';
+
+    consolas.forEach(consola => {
+        if (consola.id <= nivelUsuario) {
+            const divConsola = document.createElement('div');
+            divConsola.classList.add('infoConsola');
+            divConsola.innerHTML = `
+                <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
+                <div>
+                    <h2>${consola.nombre}</h2>
+                    <p>${consola.descripcion}</p>
+                </div>
+            `;
+            divLogros.appendChild(divConsola);
+        }
+    });
+}
+
+function ocultarLogros() {
+    divLogros = document.getElementById('divLogros');
+    divLogros.style.display = 'none';
+}

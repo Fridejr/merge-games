@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="bg-blue-500 min-h-screen flex items-center justify-center">
-        <div class="contenedor bg-gray-100 shadow-md rounded sm:p-8">
+        <div class="contenedor bg-gray-100 shadow-md rounded sm:p-8 sm:pb-0">
             <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
             <div class="grilla grid 
             @if ($tablero->n_casillas <= 4)
@@ -44,16 +44,29 @@
                     @endif
                 @endfor
             </div>
-            <div class="contador mt-4 text-lg sm:text-xl text-center">
-                <p>0</p>
+            <div class="botones text-center">
+                <div onclick="mostrarLogros()" class="boton mt-4 text-lg sm:text-xl text-center">
+                    <p>Logros</p>
+                </div>
+                <div class="contador mt-4 text-lg sm:text-xl text-center">
+                    <p>0</p>
+                </div>
+                <div class="boton mt-4 text-lg sm:text-xl text-center">
+                    <p>Tienda</p>
+                </div>
             </div>
-            <button class="mt-4 px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded" onclick="pruebas()">Pulsar</button>
         </div>
+    </div>
+
+    <div id="divLogros">
+        <button onclick="ocultarLogros()" class="p-2 px-4">X</button>
+        
     </div>
 
     <script>
         //Exportar el nivel para poder usarlo en el script
-        const nivel = {{ $nivel }};
+        var nivelUsuario = {{ $nivel }};
+        const consolas = @json($consolas);
     </script>
 
     <script src="js/script.js"></script>

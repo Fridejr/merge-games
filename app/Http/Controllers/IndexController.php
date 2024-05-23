@@ -43,7 +43,10 @@ class IndexController extends Controller
         //obtiene el nivel del usuario
         $nivel = Auth::user()->nivel;
 
-        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel'));
+        //Obtiene todas las consolas que existen en la base de datos
+        $consolas = Consola::all();
+
+        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel', 'consolas'));
     }
 
     public function incrementarCasillas(Request $request)
