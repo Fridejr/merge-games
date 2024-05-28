@@ -46,7 +46,10 @@ class IndexController extends Controller
         //Obtiene todas las consolas que existen en la base de datos
         $consolas = Consola::all();
 
-        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel', 'consolas'));
+        //Obtiene el dinero del usuario
+        $dinero = Auth::user()->dinero;
+
+        return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel', 'consolas', 'dinero'));
     }
 
     public function incrementarCasillas(Request $request)
@@ -217,6 +220,23 @@ class IndexController extends Controller
             $user->save();
 
             return response()->json(['success' => true, 'nivel' => $user->nivel]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function actualizarDinero(Request $request)
+    {
+        try {
+            // Obtén el ID del usuario autenticado
+            $userId = Auth::id();
+
+            // Actualiza el dinero del usuario
+            $user = User::find($userId);
+            $user->dinero = $request->dinero;
+            $user->save();
+
+            return response()->json(['success' => true, 'dinero' => $user->dinero]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
         }

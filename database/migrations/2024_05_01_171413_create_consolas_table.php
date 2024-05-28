@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion');
             $table->string('ruta_imagen');
-            $table->integer('money');
+            $table->float('money');
             $table->timestamps();
         });
     }

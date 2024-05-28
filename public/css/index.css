@@ -1,5 +1,4 @@
 
- */
 .casilla {
     background-image: url('../images/casilla-recta.png');
     background-size: cover;
@@ -25,6 +24,7 @@
     border-bottom-left-radius: 0%;
     border-bottom-right-radius: 0%;
     width: 20%;
+    min-width: fit-content;
     padding: 5px;
 }
 
@@ -34,6 +34,7 @@
 
 
 #divLogros {
+    z-index: 100;
     display: none;
     position: absolute;
     top: 50%;
@@ -74,6 +75,23 @@
     }
 }
 
+.dinero {
+    user-select: none;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    color: white;
+    margin-left: 2%;
+    animation: desaparecerDinero 1.5s ease-in-out forwards;
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+
+}
+
 
 @keyframes caida {
     0% {
@@ -87,6 +105,31 @@
     }
     100% {
         transform: translateY(0);
+    }
+}
+
+@keyframes desaparecerDinero {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-5);
     }
 }
 

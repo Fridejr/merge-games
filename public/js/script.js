@@ -1,7 +1,13 @@
 let contador = 0;
 const divContador = document.querySelector('.contador');
+const divNivel = document.querySelector('.divNivel');
+const divDinero = document.querySelector('.divDinero');
+const divDineroQueGenera = document.querySelector('.divDineroQueGenera');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
+const casillas = document.querySelectorAll('.casilla');
+
+dineroQueGenera();
 
 divContador.addEventListener('click', (event) => {
     event.preventDefault();
@@ -31,6 +37,89 @@ setInterval(() => {
     contador++;
 }, 1000);
 
+setInterval(() => {
+    const divsDinero = document.querySelectorAll('.dinero');
+    let dineroTotal = parseFloat(document.querySelector('.divDinero').innerText);
+
+    casillas.forEach(casilla => {
+        if (casilla.querySelector('img')) {
+            let ruta_imagen = obtenerIdConsola(casilla.querySelector('img').src);
+            let dinero = 0;
+            let coordenadas = casilla.getBoundingClientRect();
+            
+            consolas.forEach(consola => {
+                if (consola.id === ruta_imagen) {
+                    dinero = consola.money;
+                }
+            });
+
+            dineroTotal += parseFloat(dinero);
+
+            const mostrarDinero = document.createElement('div');
+            mostrarDinero.className = 'dinero';
+            mostrarDinero.style.position = 'absolute';
+            mostrarDinero.style.left = `${coordenadas.left + window.scrollX}px`;
+            mostrarDinero.style.top = `${coordenadas.top + window.scrollY}px`;
+            mostrarDinero.innerHTML = `<img src='images/moneda.png' alt='img'> ${dinero % 1 === 0 ? dinero : dinero.toFixed(2)}`;
+            
+            document.body.appendChild(mostrarDinero);
+        }
+    });
+
+    // Actualizar el dinero
+    divDinero.innerText = dineroTotal % 1 === 0 ? dineroTotal : dineroTotal.toFixed(2);
+
+    // Actualizar el dinero del usuario en la bbdd
+    fetch('/actualizar-dinero', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ dinero: dineroTotal.toFixed(2) })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Dinero actualizado:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    // Borrar los div anteriores para no sobrecargar el DOM
+    divsDinero.forEach(div => {
+        div.remove();
+    });
+
+}, 3000);
+
+function dineroQueGenera() {
+    let dineroGenerado = 0;
+
+    casillas.forEach(casilla => {
+        if (casilla.querySelector('img')) {
+            let ruta_imagen = obtenerIdConsola(casilla.querySelector('img').src);
+            let dinero = 0;
+            
+            consolas.forEach(consola => {
+                if (consola.id === ruta_imagen) {
+                    dinero = consola.money;
+                }
+            });
+
+            dineroGenerado += parseFloat(dinero);
+        }
+    });
+
+    divDineroQueGenera.innerText = dineroGenerado.toFixed(2);
+}
+
+
 function obtenerIdConsola(src) {
     const consola = consolas.find(consola => src.endsWith(consola.ruta_imagen));
     return consola ? consola.id : 0;
@@ -42,8 +131,7 @@ function obtenerRutaImagenConsola(id) {
 }
 
 function nuevaConsola() {
-    const casillas = document.querySelectorAll('.casilla');
-    const casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
+    let casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
 
     if (casillasLibres.length > 0) {
         const nuevaCasilla = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
@@ -72,6 +160,9 @@ function nuevaConsola() {
         .catch(error => {
             console.error('Error:', error);
         });
+
+        dineroQueGenera();
+
     } else {
         console.log("No hay casillas libres disponibles.");
     }
@@ -235,6 +326,7 @@ document.addEventListener('mouseup', (event) => {
                 });
                 
                 pruebas(idConsolaSiguiente);
+                dineroQueGenera();
                 console.log('Son la misma consola, se combinan y se actualiza a la siguiente consola.');
                 
             } else if (imagenCasilla) {
@@ -328,12 +420,14 @@ document.addEventListener('mouseup', (event) => {
 });
 
 
+consolasMostradas = [];
 function mostrarLogros() {
     divLogros = document.getElementById('divLogros');
     divLogros.style.display = 'block';
 
     consolas.forEach(consola => {
-        if (consola.id <= nivelUsuario) {
+        if (consola.id <= nivelUsuario && !consolasMostradas.includes(consola)) {
+            consolasMostradas.push(consola);
             const divConsola = document.createElement('div');
             divConsola.classList.add('infoConsola');
             divConsola.innerHTML = `

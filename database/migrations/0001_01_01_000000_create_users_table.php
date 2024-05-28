@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('nivel')->default(1)->nullable();
+            $table->float('dinero')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

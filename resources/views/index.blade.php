@@ -12,6 +12,21 @@
     <div class="bg-blue-500 min-h-screen flex items-center justify-center">
         <div class="contenedor bg-gray-100 shadow-md rounded sm:p-8 sm:pb-0">
             <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
+            <div class="flex place-content-around">
+                <div class="divNivel text-blue-500">
+                    {{ $nivel }}
+                </div>
+                <div class="flex">
+                    <img src="{{ asset('images/moneda.png') }}" alt="" class="w-7">
+                    <div class="divDinero">
+                        {{ $dinero }}
+                    </div>
+                </div>
+                <div class="divDineroQueGenera text-blue-500">
+                    
+                </div>
+            </div>
+
             <div class="grilla grid 
             @if ($tablero->n_casillas <= 4)
                 grid-cols-2
