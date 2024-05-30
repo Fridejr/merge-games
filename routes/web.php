@@ -7,7 +7,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::redirect('/', '/admin');
+Route::redirect('/', '/admin/login');
 
 Route::get('/index', [IndexController::class, 'miVista'])->name('index');
 Route::get('/incrementar-casillas', [IndexController::class, 'incrementarCasillas']);

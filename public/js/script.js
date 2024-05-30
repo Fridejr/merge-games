@@ -5,7 +5,6 @@ const divDinero = document.querySelector('.divDinero');
 const divDineroQueGenera = document.querySelector('.divDineroQueGenera');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
-const casillas = document.querySelectorAll('.casilla');
 
 dineroQueGenera();
 
@@ -40,6 +39,7 @@ setInterval(() => {
 setInterval(() => {
     const divsDinero = document.querySelectorAll('.dinero');
     let dineroTotal = parseFloat(document.querySelector('.divDinero').innerText);
+    const casillas = document.querySelectorAll('.casilla');
 
     casillas.forEach(casilla => {
         if (casilla.querySelector('img')) {
@@ -100,6 +100,7 @@ setInterval(() => {
 
 function dineroQueGenera() {
     let dineroGenerado = 0;
+    const casillas = document.querySelectorAll('.casilla');
 
     casillas.forEach(casilla => {
         if (casilla.querySelector('img')) {
@@ -131,6 +132,7 @@ function obtenerRutaImagenConsola(id) {
 }
 
 function nuevaConsola() {
+    const casillas = document.querySelectorAll('.casilla');
     let casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
 
     if (casillasLibres.length > 0) {
@@ -168,13 +170,30 @@ function nuevaConsola() {
     }
 }
 
-function pruebas(nuevaConsola) {
-    console.log(nuevaConsola);
-    const casillas = grilla.children.length;
+function mostrarNuevaConsola(id) {
+    consolas.forEach(consola => {
+        if (consola.id === id) {
+            divInfoConsola = document.getElementById('divInfoConsola');
+            divInfoConsola.style.display = 'block';
+            divInfoConsola.innerHTML = `
+                <button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>
+                <h1 class="text-2xl font-bold mb-4">Enhorabuena, nueva consola!</h1>
+                <img src='${consola.ruta_imagen}' alt='img' class="w-32 h-32 mx-auto mb-4">
+                <h2 class="text-xl font-semibold mb-2">${consola.nombre}</h2>
+                <p class="text-gray-700">${consola.descripcion}</p>
+            `;
+        }
+    })
+}
 
-    if (nuevaConsola > nivelUsuario) {
+function pruebas(id_consola) {
+    const n_casillas = grilla.children.length;
+
+    if (id_consola > nivelUsuario) {
         // Actualizar el nivel del usuario
         nivelUsuario += 1;
+
+        mostrarNuevaConsola(id_consola);
 
         fetch('/subir-nivel', {
             method: 'POST',
@@ -197,16 +216,16 @@ function pruebas(nuevaConsola) {
         });
 
         // Añadir casillas si es necesario
-        if (nuevaConsola >= 4) {
-            if (casillas == 4) {
+        if (id_consola >= 4) {
+            if (n_casillas == 4) {
                 grilla.classList.add('grid-cols-3');
-            } else if (casillas == 9) {
+            } else if (n_casillas == 9) {
                 grilla.classList.add('grid-cols-4');
-            } else if (casillas == 12) {
+            } else if (n_casillas == 12) {
                 grilla.classList.add('grid-cols-5');
-            } else if (casillas == 20) {
+            } else if (n_casillas == 20) {
                 grilla.classList.add('grid-cols-6');
-            } else if (casillas > 25) {
+            } else if (n_casillas > 25) {
                 grilla.classList.add('grid-cols-7');
             }
 
@@ -232,14 +251,17 @@ let casillasCoords = [];
 
 document.addEventListener('mousedown', (event) => {
     if (event.target.tagName === 'IMG') {
-        dragging = true;
-        draggedElement = event.target;
-        originalWidth = draggedElement.width;
-        originalHeight = draggedElement.height;
-        draggedElement.style.width = originalWidth + 'px';
-        draggedElement.style.height = originalHeight + 'px';
-        event.preventDefault();
-        obtenerCoordenadasCasillas();
+        if (event.target.parentElement.classList.contains('casilla')) {
+            event.target.style.cursor = 'grabbing';
+            dragging = true;
+            draggedElement = event.target;
+            originalWidth = draggedElement.width;
+            originalHeight = draggedElement.height;
+            draggedElement.style.width = originalWidth + 'px';
+            draggedElement.style.height = originalHeight + 'px';
+            event.preventDefault();
+            obtenerCoordenadasCasillas();
+        }
     }
 });
 
@@ -420,29 +442,28 @@ document.addEventListener('mouseup', (event) => {
 });
 
 
-consolasMostradas = [];
 function mostrarLogros() {
     divLogros = document.getElementById('divLogros');
     divLogros.style.display = 'block';
+    divLogros.innerHTML = '<button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>';
 
     consolas.forEach(consola => {
-        if (consola.id <= nivelUsuario && !consolasMostradas.includes(consola)) {
-            consolasMostradas.push(consola);
-            const divConsola = document.createElement('div');
-            divConsola.classList.add('infoConsola');
-            divConsola.innerHTML = `
-                <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
-                <div>
-                    <h2>${consola.nombre}</h2>
-                    <p>${consola.descripcion}</p>
+        if (consola.id <= nivelUsuario) {
+            divLogros.innerHTML += `
+                <div class="infoConsola">
+                    <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
+                    <div>
+                        <h2>${consola.nombre}</h2>
+                        <p>${consola.descripcion}</p>
+                    </div>
                 </div>
+                <hr class="my-4 border-gray-500 w-90">
             `;
-            divLogros.appendChild(divConsola);
         }
     });
 }
 
-function ocultarLogros() {
-    divLogros = document.getElementById('divLogros');
-    divLogros.style.display = 'none';
+function ocultarContenedor(boton) {
+    divPadre = boton.parentNode;
+    divPadre.style.display = 'none';
 }

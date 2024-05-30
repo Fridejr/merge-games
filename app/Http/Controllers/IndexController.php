@@ -14,7 +14,8 @@ class IndexController extends Controller
 {
     public function miVista()
     {
-        // Obtiene el ID del usuario autenticado
+        if (Auth::check()) {
+            // Obtiene el ID del usuario autenticado
         $userId = Auth::id();
 
         // Obtiene el tablero del jugador autenticado
@@ -50,6 +51,7 @@ class IndexController extends Controller
         $dinero = Auth::user()->dinero;
 
         return view('index', compact('tablero', 'numeroCasillas', 'numeroConsolas', 'posicionesConsolas', 'imagenConsola', 'nivel', 'consolas', 'dinero'));
+        }
     }
 
     public function incrementarCasillas(Request $request)

@@ -145,7 +145,7 @@ class ConsolaSeeder extends Seeder
             [
                 'nombre' => 'PlayStation 4',
                 'descripcion' => 'Lanzada en 2013, la PlayStation 4 es una consola de videojuegos de octava generación desarrollada por Sony. Es conocida por sus potentes capacidades gráficas y su integración con servicios multimedia.',
-                'ruta_imagen' => 'images/ps4.png',
+                'ruta_imagen' => 'images/play4.png',
                 'money' => 60600,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -169,7 +169,7 @@ class ConsolaSeeder extends Seeder
             [
                 'nombre' => 'PlayStation 5',
                 'descripcion' => 'Lanzada en 2020, la PlayStation 5 es una consola de videojuegos de novena generación desarrollada por Sony. Ofrece gráficos de alta resolución, tiempos de carga rápidos y una experiencia de juego inmersiva.',
-                'ruta_imagen' => 'images/ps5.png',
+                'ruta_imagen' => 'images/play5.png',
                 'money' => 90900,
                 'created_at' => now(),
                 'updated_at' => now(),

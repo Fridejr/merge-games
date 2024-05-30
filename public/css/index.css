@@ -10,6 +10,7 @@
 .casilla img {
     opacity: 90;
     animation: caida 0.3s ease-in-out;
+    cursor: grab;
 }
 
 .botones {
@@ -33,7 +34,7 @@
 }
 
 
-#divLogros {
+#divLogros, #divInfoConsola {
     z-index: 100;
     display: none;
     position: absolute;
@@ -48,13 +49,14 @@
     border-radius: 10px;
     border: 2px solid rgba(0, 0, 0, 0.708);
     background-color: rgba(255, 255, 255, 0.936);
+    
 }
 
-#divLogros::-webkit-scrollbar {
+#divLogros::-webkit-scrollbar, #divInfoConsola::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Opera */
 }
 
-#divLogros button {
+#divLogros button, #divInfoConsola button {
     position: absolute;
     right: 0;
     top: 0; 

@@ -60,22 +60,23 @@
                 @endfor
             </div>
             <div class="botones text-center">
-                <div onclick="mostrarLogros()" class="boton mt-4 text-lg sm:text-xl text-center">
-                    <p>Logros</p>
+                <div onclick="mostrarLogros()" class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
+                    <img src="{{ asset('images/medalla.png') }}" alt="imagen de medalla" class="w-9">
                 </div>
-                <div class="contador mt-4 text-lg sm:text-xl text-center">
+                <div class="contador mt-4 text-lg sm:text-xl text-center cursor-pointer">
                     <p>0</p>
                 </div>
-                <div class="boton mt-4 text-lg sm:text-xl text-center">
-                    <p>Tienda</p>
+                <div class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
+                    <img src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="w-9">
                 </div>
             </div>
         </div>
     </div>
 
     <div id="divLogros">
-        <button onclick="ocultarLogros()" class="p-2 px-4">X</button>
-        
+    </div>
+
+    <div id="divInfoConsola">
     </div>
 
     <script>
