@@ -1,3 +1,10 @@
+img {
+    user-select: none;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
 
 .casilla {
     background-image: url('../images/casilla-recta.png');
@@ -19,7 +26,7 @@
 }
 
 .contador {
-    user-select: none; /* Desactivar la selección de texto */
+    user-select: none;
     border: 2px solid black;
     border-radius: 5px;
     border-bottom-left-radius: 0%;
@@ -34,7 +41,7 @@
 }
 
 
-#divLogros, #divInfoConsola {
+#divLogros, #divInfoConsola, #divTienda {
     z-index: 100;
     display: none;
     position: absolute;
@@ -49,14 +56,20 @@
     border-radius: 10px;
     border: 2px solid rgba(0, 0, 0, 0.708);
     background-color: rgba(255, 255, 255, 0.936);
-    
 }
 
-#divLogros::-webkit-scrollbar, #divInfoConsola::-webkit-scrollbar {
+#divTienda {
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+
+#divLogros::-webkit-scrollbar, #divInfoConsola::-webkit-scrollbar, #divTienda::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Opera */
 }
 
-#divLogros button, #divInfoConsola button {
+#divLogros button, #divInfoConsola button, #divTienda button {
     position: absolute;
     right: 0;
     top: 0; 
@@ -77,6 +90,37 @@
     }
 }
 
+.divCompra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(128, 128, 128, 0.719);
+    border-radius: 15px;
+    width: 80%;
+    margin: 2%;
+    padding-right: 2%;
+    padding-left: 2%;
+
+    img {
+        margin: 1%;
+        width: 30%;
+        height: 30%;
+    }
+
+    .botonCompra {
+        background-color: #e81123;
+        border-radius: 5px;
+        border: 1px solid rgba(128, 128, 128, 0.719);
+        padding: 2%;
+        cursor: pointer;
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1em;
+    }
+}
+
 .dinero {
     user-select: none;
     width: fit-content;
@@ -92,6 +136,27 @@
         height: 20px;
     }
 
+}
+
+.mensaje {
+    z-index: 101;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    width: fit-content;
+    padding: 7px;
+    border-radius: 50px;
+    background-color: rgba(128, 128, 128, 0.573);
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
 }
 
 
@@ -151,7 +216,11 @@
         padding: 0.5rem 1rem; /* 8px 16px */
     }
 
-    #divLogros {
+    #divLogros, #divInfoConsola, #divTienda {
         width: 90%;
+    }
+
+    .divCompra {
+        font-size: 0.7em;
     }
 }

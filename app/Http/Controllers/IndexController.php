@@ -243,4 +243,5 @@ class IndexController extends Controller
             return response()->json(['error' => 'Error en el servidor: ' . $e->getMessage()], 500);
         }
     }
+
 }

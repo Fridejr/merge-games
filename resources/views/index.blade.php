@@ -10,8 +10,8 @@
 </head>
 <body class="bg-gray-100">
     <div class="bg-blue-500 min-h-screen flex items-center justify-center">
-        <div class="contenedor bg-gray-100 shadow-md rounded sm:p-8 sm:pb-0">
-            <h1 class="text-xl sm:text-2xl mb-4 text-center">Merge Games</h1>
+        <div class="contenedor bg-gray-400 shadow-md rounded sm:p-8 sm:pb-0">
+            <img src="{{ asset('images/logo.png') }}" alt="" class="w-40">
             <div class="flex place-content-around">
                 <div class="divNivel text-blue-500">
                     {{ $nivel }}
@@ -66,18 +66,18 @@
                 <div class="contador mt-4 text-lg sm:text-xl text-center cursor-pointer">
                     <p>0</p>
                 </div>
-                <div class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
+                <div onclick="mostrarTienda()" class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
                     <img src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="w-9">
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="divLogros">
-    </div>
+    <div id="divLogros"></div>
 
-    <div id="divInfoConsola">
-    </div>
+    <div id="divTienda"></div>
+
+    <div id="divInfoConsola"></div>
 
     <script>
         //Exportar el nivel para poder usarlo en el script

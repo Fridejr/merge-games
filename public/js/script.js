@@ -6,6 +6,9 @@ const divDineroQueGenera = document.querySelector('.divDineroQueGenera');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
 
+let dineroActual = parseFloat(divDinero.innerText.replace(/[^0-9.-]+/g, ""));
+divDinero.innerText = abreviarNumero(dineroActual);
+
 dineroQueGenera();
 
 divContador.addEventListener('click', (event) => {
@@ -38,7 +41,7 @@ setInterval(() => {
 
 setInterval(() => {
     const divsDinero = document.querySelectorAll('.dinero');
-    let dineroTotal = parseFloat(document.querySelector('.divDinero').innerText);
+    let dineroGenerado = 0;
     const casillas = document.querySelectorAll('.casilla');
 
     casillas.forEach(casilla => {
@@ -53,7 +56,7 @@ setInterval(() => {
                 }
             });
 
-            dineroTotal += parseFloat(dinero);
+            dineroGenerado += parseFloat(dinero);
 
             const mostrarDinero = document.createElement('div');
             mostrarDinero.className = 'dinero';
@@ -66,8 +69,11 @@ setInterval(() => {
         }
     });
 
-    // Actualizar el dinero
-    divDinero.innerText = dineroTotal % 1 === 0 ? dineroTotal : dineroTotal.toFixed(2);
+    // Sumar el dinero generado al dinero total
+    dineroActual += dineroGenerado;
+
+    // Actualizar el dinero mostrado
+    divDinero.innerText = abreviarNumero(dineroActual);
 
     // Actualizar el dinero del usuario en la bbdd
     fetch('/actualizar-dinero', {
@@ -76,7 +82,7 @@ setInterval(() => {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        body: JSON.stringify({ dinero: dineroTotal.toFixed(2) })
+        body: JSON.stringify({ dinero: dineroActual.toFixed(2) })
     })
     .then(response => {
         if (!response.ok) {
@@ -96,7 +102,7 @@ setInterval(() => {
         div.remove();
     });
 
-}, 3000);
+}, 7000);
 
 function dineroQueGenera() {
     let dineroGenerado = 0;
@@ -117,7 +123,7 @@ function dineroQueGenera() {
         }
     });
 
-    divDineroQueGenera.innerText = dineroGenerado.toFixed(2);
+    divDineroQueGenera.innerText = abreviarNumero(dineroGenerado);
 }
 
 
@@ -131,42 +137,85 @@ function obtenerRutaImagenConsola(id) {
     return consola ? consola.ruta_imagen : "/images/defect.png";
 }
 
-function nuevaConsola() {
+function nuevaConsola(id = null, precio = null) {
     const casillas = document.querySelectorAll('.casilla');
     let casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
 
     if (casillasLibres.length > 0) {
         const nuevaCasilla = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
-        const imagenConsola = obtenerRutaImagenConsola(1);
+        const consolaId = id || 1;
+        const imagenConsola = obtenerRutaImagenConsola(consolaId);
 
-        nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img'>`;
-        const posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
+        if (id === null || (precio !== null && precio <= dineroActual)) {
+            nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img'>`;
+            const posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
 
-        fetch('/agregar-consola', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ id_consola: 1, posicion: posicion })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            fetch('/agregar-consola', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ id_consola: consolaId, posicion: posicion })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
+            if (precio) {
+                const nuevoDinero = dineroActual - precio;
+                console.log(dineroActual, nuevoDinero);
+                dineroActual = nuevoDinero;  // Actualizar el valor completo del dinero
+                divDinero.innerText = abreviarNumero(nuevoDinero);
+
+                fetch('/actualizar-dinero', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ dinero: nuevoDinero.toFixed(2) })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+        } else {
+            divTienda.innerHTML += '<div class="mensaje"><img src="/images/warning.png"> Dinero insuficiente.</div>';
+
+            setTimeout(() => {
+                document.querySelector('.mensaje').remove();
+            }, 2000);
+        }
 
         dineroQueGenera();
 
     } else {
-        console.log("No hay casillas libres disponibles.");
+        divTienda.innerHTML += '<div class="mensaje"><img src="/images/warning.png"> No hay casillas libres.</div>';
+
+        setTimeout(() => {
+            document.querySelector('.mensaje').remove();
+        }, 2000);
     }
 }
 
@@ -453,7 +502,7 @@ function mostrarLogros() {
                 <div class="infoConsola">
                     <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
                     <div>
-                        <h2>${consola.nombre}</h2>
+                        <h2><b>${consola.nombre}</b></h2>
                         <p>${consola.descripcion}</p>
                     </div>
                 </div>
@@ -463,7 +512,47 @@ function mostrarLogros() {
     });
 }
 
+function mostrarTienda() {
+    const divTienda = document.getElementById('divTienda');
+    divTienda.style.display = 'flex';
+    divTienda.style.flexDirection = 'column';
+    divTienda.style.alignItems = 'center';
+    divTienda.innerHTML = '<button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>';
+    divTienda.innerHTML += '<div>Dinero disponible: $' + abreviarNumero(dineroActual) + '</div>';
+
+    const precioBase = 100; // Precio base inicial
+    const factorCrecimiento = 1.5; // Factor de crecimiento exponencial
+
+    consolas.forEach((consola, indice) => {
+        if (consola.id > 1 && consola.id < nivelUsuario - 1) {
+            const precio = precioBase * Math.pow(factorCrecimiento, indice) * consola.money * (nivelUsuario / 2);
+            const precioAbreviado = abreviarNumero(precio);
+            divTienda.innerHTML += `
+                <div class="divCompra w-70">
+                    <div class="flex items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4" style="width: 50%;">
+                        <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-20 h-20 sm:w-34 sm:h-34">
+                        <h2>${consola.nombre}</h2>
+                    </div>
+                    <div onclick="nuevaConsola(${consola.id}, ${precio})" class="botonCompra">
+                        <img src="../images/moneda.png" alt="imagen de consola"">
+                        <p>${precioAbreviado}</p>
+                    </div>
+                </div>
+            `;
+        }
+    });
+}
+
+
 function ocultarContenedor(boton) {
     divPadre = boton.parentNode;
     divPadre.style.display = 'none';
+}
+
+function abreviarNumero(numero) {
+    const unidades = ['', 'k', 'M', 'B', 'T'];
+    const orden = Math.floor(Math.log10(Math.abs(numero)) / 3);
+    const abreviado = numero / Math.pow(10, orden * 3);
+
+    return `${abreviado.toFixed(2)}${unidades[orden]}`;
 }
