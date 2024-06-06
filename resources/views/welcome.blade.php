@@ -72,7 +72,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="logo">
                     <h1 class="text-2xl font-semibold text-black dark:text-white mb-6 text-center">Bienvenido, ¿Qué desea hacer?</h1>
                     <div class="flex flex-col items-center">
-                        <a href="{{ url('/guest') }}" class="button">Entrar como Invitado</a>
+                        <a href="{{ route('index') }}" class="button">Entrar como Invitado</a>
                         <a href="{{ route('login') }}" class="button">Iniciar Sesión</a>
                         <a href="{{ route('register') }}" class="button">Registrarse</a>
                     </div>

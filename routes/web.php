@@ -19,6 +19,7 @@ Route::post('/intercambiar-consolas', [IndexController::class, 'intercambiarCons
 Route::post('/actualizar-posicion-consola', [IndexController::class, 'actualizarPosicionConsola']);
 Route::post('/subir-nivel', [IndexController::class, 'subirNivel']);
 Route::post('/actualizar-dinero', [IndexController::class, 'actualizarDinero']);
+Route::post('/reiniciar-juego', [IndexController::class, 'reiniciarJuego']);
 
 
 Auth::routes();

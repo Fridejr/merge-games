@@ -43,6 +43,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('nivel'),
+                Tables\Columns\TextColumn::make('dinero'),
                 Tables\Columns\TextColumn::make('created_at')
 
             ])
@@ -51,6 +52,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
