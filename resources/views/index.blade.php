@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="relative">
-        <button id="menuButton" class="p-2 bg-blue-600 text-white rounded-lg mt-4 ml-4 focus:outline-none">
+        <button id="menuButton" class="p-2 text-white rounded-lg mt-4 ml-4 focus:outline-none">
             ☰
         </button>
         <div id="dropdownMenu" class="absolute left-0 mt-2 w-48  bg-white border border-gray-300 rounded-lg shadow-lg hidden text-center">
@@ -18,9 +18,11 @@
             <hr class="my-2">
             @if (auth()->check())
                 <a onclick="mostrarConfirmacion()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">Reiniciar Juego</a>
-                <a href="/admin" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel de Aministrador</a>
+                @role('administrador')
+                    <a href="/admin" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel de Aministrador</a>
+                @endrole
             @endif
-            <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" class="p-2"> 
+            <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" class="p-2" onsubmit="return actualizarDatosUsuario(event);"> 
                 @csrf
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded flex w-full justify-center">
                     <svg class="fi-btn-icon transition duration-75 h-5 w-5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -33,15 +35,18 @@
         </div>
     </div>
 
-    <div class="bg-blue-500 min-h-screen flex items-center justify-center">
-        <div class="contenedor bg-gray-400 shadow-md rounded sm:p-8 sm:pb-0">
-            <img src="{{ asset('images/logo.png') }}" alt="" class="w-40">
-            <div class="flex place-content-around">
+    <header class="flex justify-center pt-2" style="background-color: #333; height: 15vh">
+        <img src="{{ asset('images/maybe.png') }}" alt="imagen logo" class="logo" onclick="actualizarDatosUsuario()">
+    </header>
+
+    <div class="contenedorPrincipal min-h-screen p-3 pt-0">
+        <div class="contenedor rounded flex flex-col items-center">
+            <div class="datos flex place-content-around" style="width: 100%">
                 <div class="divNivel">
                     {{ $nivel }}
                 </div>
-                <div class="flex">
-                    <img src="{{ asset('images/moneda.png') }}" alt="" class="w-7">
+                <div class="flex items-center justify-center">
+                    <img src="{{ asset('images/moneda.png') }}" alt="" class="mr-1" style="width: 2vw">
                     <div class="divDinero">
                         @if ($dinero > 0) {
                             {{ $dinero }}
@@ -56,19 +61,19 @@
                 </div>
             </div>
 
-            <div class="grilla grid 
+            <div class="grilla 
             @if ($tablero->n_casillas <= 4)
                 grid-cols-2
-            @elseif ($tablero->n_casillas <= 9)
+            @elseif ($tablero->n_casillas <= 6)
                 grid-cols-3
-            @elseif ($tablero->n_casillas <= 12)
+            @elseif ($tablero->n_casillas <= 8)
                 grid-cols-4
-            @elseif ($tablero->n_casillas <= 20)
+            @elseif ($tablero->n_casillas <= 10)
                 grid-cols-5
             @elseif ($tablero->n_casillas <= 25)
                 grid-cols-6
             @endif">
-                @for ($i = 1; $i < $numeroCasillas + 1; $i++)
+                @for ($i = 1; $i < $tablero->n_casillas + 1; $i++)
                     @php
                         $consola = $tablero->consolas()
                             ->select('c.ruta_imagen')
@@ -80,24 +85,24 @@
                     @endphp
 
                     @if ($consola)
-                        <div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24">
+                        <div class="casilla bg-transparent p-2 lg:p-4 text-center">
                             <img src="{{ asset($consola->ruta_imagen) }}" alt="img" class="w-full h-full object-contain">
                         </div>
                     @else
-                        <div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>
+                        <div class="casilla bg-transparent p-2 sm:p-4 text-center"></div>
                     @endif
                 @endfor
             </div>
-            <div class="botones text-center">
-                <div onclick="mostrarLogros()" class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
-                    <img src="{{ asset('images/medalla.png') }}" alt="imagen de medalla" class="w-9">
-                </div>
-                <div class="contador mt-4 text-lg sm:text-xl text-center cursor-pointer">
+            <div class="botones flex justify-center">
+                {{-- <div onclick="mostrarLogros()" class="boton mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
+                </div> --}}
+                <img onclick="mostrarLogros()" src="{{ asset('images/medalla.png') }}" alt="imagen de medalla" class="boton">
+                <div class="contador text-lg sm:text-xl text-center cursor-pointer">
                     <p>0</p>
                 </div>
-                <div onclick="mostrarTienda()" class="mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
-                    <img src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="w-9">
-                </div>
+                <img onclick="mostrarTienda()" src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="boton">
+                {{-- <div  class="boton mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
+                </div> --}}
             </div>
         </div>
     </div>
@@ -124,15 +129,14 @@
         </div>
     </div>
 
-    @if (@auth()->check()) {
+    @if (@auth()->check())
         <script>
             const invitado = false;
         </script>
-    } @else {
+    @else 
         <script>
             const invitado = true;
         </script>
-    }
     @endif
 
     <script>

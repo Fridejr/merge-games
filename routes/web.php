@@ -8,7 +8,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/* Route::redirect('/', '/admin/login'); */
 Route::redirect('/admin/login', '/login');
 
 Route::get('/index', [IndexController::class, 'miVista'])->name('index');
@@ -20,6 +19,7 @@ Route::post('/actualizar-posicion-consola', [IndexController::class, 'actualizar
 Route::post('/subir-nivel', [IndexController::class, 'subirNivel']);
 Route::post('/actualizar-dinero', [IndexController::class, 'actualizarDinero']);
 Route::post('/reiniciar-juego', [IndexController::class, 'reiniciarJuego']);
+Route::post('/actualizar-datos', [IndexController::class, 'actualizarDatos']);
 
 
 Auth::routes();

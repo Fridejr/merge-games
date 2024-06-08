@@ -96,7 +96,7 @@ setInterval(() => {
 
     // Actualizar el dinero del usuario en la bbdd
     if (!invitado) {
-        fetch('/actualizar-dinero', {
+        /* fetch('/actualizar-dinero', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ setInterval(() => {
         })
         .catch(error => {
             console.error('Error:', error);
-        });
+        }); */
     }
 
     // Borrar los div anteriores para no sobrecargar el DOM
@@ -123,7 +123,7 @@ setInterval(() => {
         div.remove();
     });
 
-}, 7000);
+}, 3000);
 
 function dineroQueGenera() {
     let dineroGenerado = 0;
@@ -173,11 +173,11 @@ function nuevaConsola(id = null, precio = null) {
         const imagenConsola = obtenerRutaImagenConsola(consolaId);
 
         if (id === null || (precio !== null && precio <= dineroActual)) {
-            nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img'>`;
+            nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img' loading="lazy">`;
             const posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
 
             if (!invitado) {
-                fetch('/agregar-consola', {
+                /* fetch('/agregar-consola', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -196,18 +196,18 @@ function nuevaConsola(id = null, precio = null) {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                });
+                }); */
             }
 
 
             if (precio) {
                 const nuevoDinero = dineroActual - precio;
                 console.log(dineroActual, nuevoDinero);
-                dineroActual = nuevoDinero;  // Actualizar el valor completo del dinero
+                dineroActual = nuevoDinero;
                 divDinero.innerText = abreviarNumero(nuevoDinero);
 
                 if (!invitado) {
-                    fetch('/actualizar-dinero', {
+                    /* fetch('/actualizar-dinero', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ function nuevaConsola(id = null, precio = null) {
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });
+                    }); */
                 }
             }
 
@@ -279,7 +279,7 @@ function pruebas(id_consola) {
 
         mostrarNuevaConsola(id_consola);
 
-        if (!invitado) {
+        /* if (!invitado) {
             fetch('/subir-nivel', {
                 method: 'POST',
                 headers: {
@@ -325,9 +325,9 @@ function pruebas(id_consola) {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-            });
-            }
-        }
+                });
+            } 
+        }*/
     }
 }
 
@@ -412,14 +412,14 @@ document.addEventListener('mouseup', (event) => {
                 let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
                 
                 if (!invitado) {
-                    fetch('/mezclar-consolas', {
+                    /* fetch('/mezclar-consolas', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         body: JSON.stringify({ 
-                            id_consola_destino: idConsolaSiguiente, 
+                            id_consola: idConsolaSiguiente, 
                             posicion_origen: posicionOrigen,
                             posicion_destino: posicionDestino
                         })
@@ -435,7 +435,7 @@ document.addEventListener('mouseup', (event) => {
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });
+                    }); */
                 }
                 
                 pruebas(idConsolaSiguiente);
@@ -457,7 +457,7 @@ document.addEventListener('mouseup', (event) => {
                 let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
                 
                 if (!invitado) {
-                    fetch('/intercambiar-consolas', {
+                    /* fetch('/intercambiar-consolas', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -479,7 +479,7 @@ document.addEventListener('mouseup', (event) => {
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });
+                    }); */
                 }
 
                 console.log('Son distintas consolas y se intercambian.');
@@ -495,7 +495,7 @@ document.addEventListener('mouseup', (event) => {
                 let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
                 
                 if (!invitado) {
-                    fetch('/actualizar-posicion-consola', {
+                    /* fetch('/actualizar-posicion-consola', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -517,7 +517,7 @@ document.addEventListener('mouseup', (event) => {
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });
+                    }); */
                 }
 
                 console.log('Consola movida a una casilla vacía.');
@@ -633,6 +633,15 @@ function ocultarContenedor(boton) {
     divPadre.style.display = 'none';
 }
 
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        document.getElementById('divInfoConsola').style.display = 'none';
+        document.getElementById('divLogros').style.display = 'none';
+        document.getElementById('divTienda').style.display = 'none';
+        document.getElementById('divConfirmacion').style.display = 'none';
+    }
+});
+
 function abreviarNumero(numero) {
     const unidades = ['', 'k', 'M', 'B', 'T'];
     const orden = Math.floor(Math.log10(Math.abs(numero)) / 3);
@@ -640,3 +649,77 @@ function abreviarNumero(numero) {
 
     return `${abreviado.toFixed(2)}${unidades[orden]}`;
 }
+
+
+
+// Función para actualizar los datos del usuario en el servidor
+function actualizarDatosUsuario(event) {
+    if (event) event.preventDefault(); // Detiene el envío del formulario si es una llamada de cierre de sesión
+
+    let datosUsuario = {
+        dinero: dineroActual,
+        nivel: nivelUsuario,
+        n_casillas: grilla.children.length,
+        consolas: []
+    };
+
+    // Actualizar la lista de consolas
+    const casillas = document.querySelectorAll('.casilla');
+    casillas.forEach((casilla, index) => {
+        const img = casilla.querySelector('img');
+        if (img) {
+            const consolaId = obtenerIdConsola(img.src);
+            datosUsuario.consolas.push({
+                posicion: index + 1,
+                consola_id: consolaId
+            });
+        }
+    });
+
+    if (!invitado) {
+        fetch('/actualizar-datos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(datosUsuario)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos actualizados:', data);
+            if (event) {
+                document.getElementById('logout-form').submit(); // Envía el formulario de cierre de sesión
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (event) {
+                document.getElementById('logout-form').submit(); // Envía el formulario incluso si hay un error
+            }
+        });
+    } else {
+        if (event) {
+            document.getElementById('logout-form').submit(); // Envía el formulario si es invitado
+        }
+    }
+}
+
+setInterval(() => {
+    actualizarDatosUsuario();
+}, 300000);
+
+window.addEventListener('beforeunload', (event) => {
+    actualizarDatosUsuario();
+});
+
+window.addEventListener('unload', (event) => {
+    actualizarDatosUsuario();
+});
+
+

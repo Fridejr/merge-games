@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -11,12 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tableros', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->integer('n_casillas')->default(15);
-            $table->timestamps();
-        });
+        $administrador = Role::create(['name' => 'administrador']);
+        $jugador = Role::create(['name' => 'jugador']);
     }
 
     /**
@@ -24,6 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tableros');
+        Role::where('name', 'administrador')->first()->delete();
+        Role::where('name', 'jugador')->first()->delete();
     }
 };
