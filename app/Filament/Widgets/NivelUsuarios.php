@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class NivelUsuarios extends ChartWidget
 {
     protected static ?string $heading = 'Usuarios por Nivel';
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected function getType(): string
     {

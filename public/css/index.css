@@ -244,7 +244,7 @@ img {
     display: flex;
     justify-content: center;
     color: white;
-    font-size: 1em;
+    font-size: 0.7vw;
     margin-left: 2%;
     background-color: rgba(128, 128, 128, 0.692);
     border-radius: 15px;
@@ -329,65 +329,15 @@ img {
     .datos {
         font-size: 0.8em;
     }
-
-    .dinero {
-        font-size: 0.6em;
-
-        /* img {
-            width: 15px;
-            height: 15px;
-        } */
-    }
 }
 
 @media (max-width: 800px) {
-    /* .contador {
-        font-size: 0.5em;
-    } */
-
-    .dinero {
-        font-size: 0.4em;
-    }
-
     .datos {
         font-size: 0.6em;
     }
 }
 
 @media (max-width: 640px) {
-    /* .casilla {
-        width: 4rem; 
-        height: 4rem; 
-        padding: 0.5rem;
-    }
-
-    .contador p {
-        font-size: 1rem; 
-    }
-
-    button {
-        padding: 0.5rem 1rem;
-    } */
-    /* body {
-        transform: rotate(-90deg);
-        transform-origin: left top;
-        width: 100vh;
-        height: 100vw;
-        overflow-x: hidden;
-        position: absolute;
-        top: 100%;
-        left: 0;
-    }
-
-    .contenedor {
-        width: 90vw;
-        height: 90vh;
-    } */
-
-    /* .contenedorPrincipal {
-        justify-content: flex-end;
-    } */
-
     #divLogros, #divInfoConsola, #divTienda {
         width: 90%;
     }

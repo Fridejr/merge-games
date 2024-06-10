@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tablero;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TableroSeeder extends Seeder
 {
@@ -12,6 +14,9 @@ class TableroSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        //crear tablero para el usuario de id 3
+        DB::table('tableros')->insert([
+            'user_id' => 3,
+        ]);
     }
 }

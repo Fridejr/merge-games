@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class JugadoresPorDia extends ChartWidget
 {
     protected static ?string $heading = 'Usuarios nuevos por día';
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     protected function getType(): string
     {
@@ -49,7 +49,7 @@ class JugadoresPorDia extends ChartWidget
                 'label' => 'Usuarios Nuevos por Día',
                 'data' => array_values($userCounts),
                 'fill' => 'start',
-                'borderColor' => '#F03BB1',
+                'borderColor' => '#de0090',
                 'backgroundColor' => 'transparent',
             ],
         ];

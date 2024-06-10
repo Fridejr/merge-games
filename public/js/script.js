@@ -136,7 +136,7 @@ function obtenerIdConsola(src) {
 
 function obtenerRutaImagenConsola(id) {
     const consola = consolas.find(consola => consola.id === id);
-    return consola ? consola.ruta_imagen : "/images/defect.png";
+    return consola ? consola.ruta_imagen : "/images/nes.png";
 }
 
 function nuevaConsola(id = null, precio = null) {
@@ -275,15 +275,17 @@ document.addEventListener('mouseup', (event) => {
         if (casillaSoltada !== null && divContenedor !== grilla.children[casillaSoltada - 1]) {
             const divDestino = grilla.children[casillaSoltada - 1];
             const imagenCasilla = divDestino.querySelector('img');
+            const ultimaConsola = consolas[consolas.length - 1].id;
+            console.log(obtenerIdConsola(imagenCasilla.src.toLowerCase()), ultimaConsola);
 
-            if (imagenCasilla && draggedElement.src.toLowerCase() === imagenCasilla.src.toLowerCase()) {
+            if (imagenCasilla && draggedElement.src.toLowerCase() === imagenCasilla.src.toLowerCase() && obtenerIdConsola(imagenCasilla.src.toLowerCase()) !== ultimaConsola) {
                 // Obtener el ID de la consola actual y la siguiente consola
                 let idConsolaActual = obtenerIdConsola(imagenCasilla.src.toLowerCase());
                 let idConsolaSiguiente = idConsolaActual + 1;
                 console.log(idConsolaActual, idConsolaSiguiente);
                     
                 let nuevaImagenSrc = obtenerRutaImagenConsola(idConsolaSiguiente);
-                
+
                 // Actualizar la casilla de destino con la nueva consola
                 divDestino.innerHTML = `<img src="${nuevaImagenSrc}" alt="img">`;
                 divContenedor.innerHTML = '';
@@ -489,18 +491,18 @@ function actualizarDatosUsuario(event) {
         .then(data => {
             console.log('Datos actualizados:', data);
             if (event) {
-                document.getElementById('logout-form').submit(); // Envía el formulario de cierre de sesión
+                document.getElementById('logout-form').submit();
             }
         })
         .catch(error => {
             console.error('Error:', error);
             if (event) {
-                document.getElementById('logout-form').submit(); // Envía el formulario incluso si hay un error
+                document.getElementById('logout-form').submit();
             }
         });
     } else {
         if (event) {
-            document.getElementById('logout-form').submit(); // Envía el formulario si es invitado
+            document.getElementById('logout-form').submit(); 
         }
     }
 }
@@ -516,5 +518,3 @@ window.addEventListener('beforeunload', (event) => {
 window.addEventListener('unload', (event) => {
     actualizarDatosUsuario();
 });
-
-
