@@ -15,13 +15,67 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Custom Styles -->
+    <style>
+        .navbar {
+            background-color: #333 !important;
+        }
+        .navbar-brand, .nav-link, .dropdown-item {
+            color: #FF851B !important;
+        }
+        .navbar-toggler {
+            border-color: #FF851B !important;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 133, 27, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/ %3E%3C/svg%3E") !important;
+        }
+        .dropdown-menu {
+            background-color: #444 !important;
+        }
+        .dropdown-item:hover {
+            background-color: #555 !important;
+        }
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .card {
+            background-color: #333;
+            border-color: #FF851B;
+        }
+        .card-header {
+            background-color: #FF851B;
+            color: #333;
+        }
+        .btn-primary {
+            background-color: #FF851B;
+            border-color: #FF851B;
+            color: #333;
+        }
+        .btn-primary:hover {
+            background-color: #e07b1a;
+            border-color: #e07b1a;
+            color: #333;
+        }
+        .form-control {
+            background-color: #444;
+            border-color: #FF851B;
+            color: white;
+        }
+        .form-check-input {
+            background-color: #444;
+            border-color: #FF851B;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{-- {{ config('app.name', 'Laravel') }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

@@ -276,7 +276,6 @@ document.addEventListener('mouseup', (event) => {
             const divDestino = grilla.children[casillaSoltada - 1];
             const imagenCasilla = divDestino.querySelector('img');
             const ultimaConsola = consolas[consolas.length - 1].id;
-            console.log(obtenerIdConsola(imagenCasilla.src.toLowerCase()), ultimaConsola);
 
             if (imagenCasilla && draggedElement.src.toLowerCase() === imagenCasilla.src.toLowerCase() && obtenerIdConsola(imagenCasilla.src.toLowerCase()) !== ultimaConsola) {
                 // Obtener el ID de la consola actual y la siguiente consola
