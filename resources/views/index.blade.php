@@ -7,6 +7,7 @@
     <title>Merge Games</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <div class="relative">
@@ -24,8 +25,8 @@
             @endif
             <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" class="p-2" onsubmit="return actualizarDatosUsuario(event);"> 
                 @csrf
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded flex w-full justify-center">
-                    <svg class="fi-btn-icon transition duration-75 h-5 w-5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded flex w-full justify-center items-center">
+                    <svg class="fi-btn-icon transition duration-75 h-5 w-5 text-white dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                         <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" clip-rule="evenodd"/>
                     </svg>
@@ -43,11 +44,12 @@
         <div class="contenedor rounded flex flex-col items-center">
             <div class="datos flex place-content-around" style="width: 100%">
                 <div class="divNivel">
+                    <img src="{{ asset('images/estrella.png') }}" class="mr-1" style="width: 2vw">
                     {{ $nivel }}
                 </div>
                 <div class="flex items-center justify-center">
                     <img src="{{ asset('images/moneda.png') }}" alt="" class="mr-1" style="width: 2vw">
-                    <div class="divDinero">
+                    <div class="divDinero flex ">
                         @if ($dinero > 0) {
                             {{ $dinero }}
                         } @else {
@@ -56,23 +58,11 @@
                         @endif
                     </div>
                 </div>
-                <div class="divDineroQueGenera">
-                    
+                <div class="divDineroQueGenera flex items-center justify-center">
                 </div>
             </div>
 
-            <div class="grilla 
-            @if ($tablero->n_casillas <= 4)
-                grid-cols-2
-            @elseif ($tablero->n_casillas <= 6)
-                grid-cols-3
-            @elseif ($tablero->n_casillas <= 8)
-                grid-cols-4
-            @elseif ($tablero->n_casillas <= 10)
-                grid-cols-5
-            @elseif ($tablero->n_casillas <= 25)
-                grid-cols-6
-            @endif">
+            <div class="grilla">
                 @for ($i = 1; $i < $tablero->n_casillas + 1; $i++)
                     @php
                         $consola = $tablero->consolas()
@@ -85,24 +75,20 @@
                     @endphp
 
                     @if ($consola)
-                        <div class="casilla bg-transparent p-2 lg:p-4 text-center">
-                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img" class="w-full h-full object-contain">
+                        <div class="casilla bg-transparent p-3 text-center">
+                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img" {{-- class="w-full h-full object-contain" --}}>
                         </div>
                     @else
-                        <div class="casilla bg-transparent p-2 sm:p-4 text-center"></div>
+                        <div class="casilla bg-transparent p-2 text-center"></div>
                     @endif
                 @endfor
             </div>
             <div class="botones flex justify-center">
-                {{-- <div onclick="mostrarLogros()" class="boton mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
-                </div> --}}
-                <img onclick="mostrarLogros()" src="{{ asset('images/medalla.png') }}" alt="imagen de medalla" class="boton">
-                <div class="contador text-lg sm:text-xl text-center cursor-pointer">
+                <img onclick="mostrarLogros()" src="{{ asset('images/medalla.png') }}" alt="imagen de medalla" class="cursor-pointer">
+                <div class="contador text-center cursor-pointer">
                     <p>0</p>
                 </div>
-                <img onclick="mostrarTienda()" src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="boton">
-                {{-- <div  class="boton mt-4 text-lg sm:text-xl text-center cursor-pointer flex items-center justify-center p-2">
-                </div> --}}
+                <img onclick="mostrarTienda()" src="{{ asset('images/tienda.png') }}" alt="imagen de tienda" class="cursor-pointer">
             </div>
         </div>
     </div>
@@ -114,7 +100,7 @@
     <div id="divInfoConsola"></div>
 
     <div id="divConfirmacion" class="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
-        <h2 class="text-center text-lg font-bold mb-4">
+        <h2 class="text-center font-bold mb-4">
             ¿Está seguro que quiere reiniciar el juego? <br>
             Tu progreso actual se perderá.
         </h2>

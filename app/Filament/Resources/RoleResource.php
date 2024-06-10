@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TableroResource\Pages;
-use App\Filament\Resources\TableroResource\RelationManagers;
-use App\Models\Tablero;
+use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\RelationManagers;
+use App\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,22 +13,17 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TableroResource extends Resource
+class RoleResource extends Resource
 {
-    protected static ?string $model = Tablero::class;
+    protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-squares-plus';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->label('Usuario')
-                    ->preload()
-                    ->required(),
-                
+                //
             ]);
     }
 
@@ -36,16 +31,13 @@ class TableroResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('user.name'),
-                Tables\Columns\TextColumn::make('created_at')
+                //
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -64,9 +56,9 @@ class TableroResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTableros::route('/'),
-            'create' => Pages\CreateTablero::route('/create'),
-            'edit' => Pages\EditTablero::route('/{record}/edit'),
+            'index' => Pages\ListRoles::route('/'),
+            'create' => Pages\CreateRole::route('/create'),
+            'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
     }
 }

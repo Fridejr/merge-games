@@ -78,7 +78,7 @@ setInterval(() => {
             mostrarDinero.style.position = 'absolute';
             mostrarDinero.style.left = `${coordenadas.left + window.scrollX}px`;
             mostrarDinero.style.top = `${coordenadas.top + window.scrollY}px`;
-            mostrarDinero.innerHTML = `<img src='images/moneda.png' alt='img'> ${dinero % 1 === 0 ? dinero : dinero.toFixed(2)}`;
+            mostrarDinero.innerHTML = `+<img src='images/moneda.png' alt='img'> ${dinero % 1 === 0 ? dinero : dinero.toFixed(2)}`;
             
             document.body.appendChild(mostrarDinero);
         }
@@ -92,30 +92,6 @@ setInterval(() => {
         divDinero.innerText = abreviarNumero(dineroActual);
     } else {
         divDinero.innerText = '0';
-    }
-
-    // Actualizar el dinero del usuario en la bbdd
-    if (!invitado) {
-        /* fetch('/actualizar-dinero', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ dinero: dineroActual.toFixed(2) })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Dinero actualizado:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        }); */
     }
 
     // Borrar los div anteriores para no sobrecargar el DOM
@@ -145,10 +121,10 @@ function dineroQueGenera() {
     });
 
     if (dineroGenerado > 0) {
-        divDineroQueGenera.innerText = abreviarNumero(dineroGenerado) + "/3seg";
+        divDineroQueGenera.innerHTML = `<img src="../images/moneda.png" class="mr-1" style="width: 2vw">` + abreviarNumero(dineroGenerado) + '<div> /3seg </div>';
 
     } else {
-        divDineroQueGenera.innerText = '0 /3seg';
+        divDineroQueGenera.innerHTML = '<img src="../images/moneda.png" class="mr-1" style="width: 2vw"><div> 0 /3seg </div>';    
     }
 }
 
@@ -176,58 +152,13 @@ function nuevaConsola(id = null, precio = null) {
             nuevaCasilla.innerHTML = `<img src='${imagenConsola}' alt='img' loading="lazy">`;
             const posicion = Array.from(nuevaCasilla.parentNode.children).indexOf(nuevaCasilla) + 1;
 
-            if (!invitado) {
-                /* fetch('/agregar-consola', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ id_consola: consolaId, posicion: posicion })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                }); */
-            }
-
-
             if (precio) {
                 const nuevoDinero = dineroActual - precio;
+                const divTienda = document.getElementById('divTienda');
+                divTienda.style.display = 'none';
                 console.log(dineroActual, nuevoDinero);
                 dineroActual = nuevoDinero;
                 divDinero.innerText = abreviarNumero(nuevoDinero);
-
-                if (!invitado) {
-                    /* fetch('/actualizar-dinero', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ dinero: nuevoDinero.toFixed(2) })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    }); */
-                }
             }
 
         } else {
@@ -260,9 +191,9 @@ function mostrarNuevaConsola(id) {
             divInfoConsola.style.display = 'block';
             divInfoConsola.innerHTML = `
                 <button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>
-                <h1 class="text-2xl font-bold mb-4">Enhorabuena, nueva consola!</h1>
+                <h1 class="font-bold mb-4">Enhorabuena, nueva consola!</h1>
                 <img src='${consola.ruta_imagen}' alt='img' class="w-32 h-32 mx-auto mb-4">
-                <h2 class="text-xl font-semibold mb-2">${consola.nombre}</h2>
+                <h2 class="font-semibold mb-2">${consola.nombre}</h2>
                 <p class="text-gray-700">${consola.descripcion}</p>
             `;
         }
@@ -275,59 +206,9 @@ function pruebas(id_consola) {
     if (id_consola > nivelUsuario) {
         // Actualizar el nivel del usuario
         nivelUsuario += 1;
-        divNivel.innerText = nivelUsuario;
+        divNivel.innerHTML = '<img src="../images/estrella.png" class="mr-1" style="width: 2vw">' + nivelUsuario;
 
         mostrarNuevaConsola(id_consola);
-
-        /* if (!invitado) {
-            fetch('/subir-nivel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Nivel del usuario actualizado:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        // Añadir casillas si es necesario
-        if (id_consola >= 4) {
-            if (n_casillas == 4) {
-                grilla.classList.add('grid-cols-3');
-            } else if (n_casillas == 9) {
-                grilla.classList.add('grid-cols-4');
-            } else if (n_casillas == 12) {
-                grilla.classList.add('grid-cols-5');
-            } else if (n_casillas == 20) {
-                grilla.classList.add('grid-cols-6');
-            } else if (n_casillas > 25) {
-                grilla.classList.add('grid-cols-7');
-            }
-
-            grilla.innerHTML += '<div class="casilla bg-transparent p-2 sm:p-4 text-center w-16 h-16 sm:w-24 sm:h-24"></div>';
-
-            if (!invitado) {
-                fetch('/incrementar-casillas')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } 
-        }*/
     }
 }
 
@@ -407,37 +288,6 @@ document.addEventListener('mouseup', (event) => {
                 divDestino.innerHTML = `<img src="${nuevaImagenSrc}" alt="img">`;
                 divContenedor.innerHTML = '';
                 
-                // Enviar la solicitud para mezclar consolas
-                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
-                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
-                
-                if (!invitado) {
-                    /* fetch('/mezclar-consolas', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ 
-                            id_consola: idConsolaSiguiente, 
-                            posicion_origen: posicionOrigen,
-                            posicion_destino: posicionDestino
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    }); */
-                }
-                
                 pruebas(idConsolaSiguiente);
                 dineroQueGenera();
                 console.log('Son la misma consola, se combinan y se actualiza a la siguiente consola.');
@@ -452,36 +302,6 @@ document.addEventListener('mouseup', (event) => {
                 // Poner la imagen de la casilla destino en la casilla de la consola arrastrada
                 divContenedor.innerHTML = `<img src="${imagenDestino}" alt="img">`;
 
-                // Enviar la solicitud para intercambiar consolas
-                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
-                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
-                
-                if (!invitado) {
-                    /* fetch('/intercambiar-consolas', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ 
-                            posicion_origen: posicionOrigen,
-                            posicion_destino: posicionDestino
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    }); */
-                }
-
                 console.log('Son distintas consolas y se intercambian.');
                 
             } else {
@@ -489,36 +309,6 @@ document.addEventListener('mouseup', (event) => {
                 let imagenOrigen = draggedElement.src;
                 divDestino.innerHTML = `<img src="${imagenOrigen}" alt="img">`;
                 divContenedor.innerHTML = '';
-
-                // Enviar la solicitud para actualizar la posición de la consola
-                let posicionOrigen = Array.from(divContenedor.parentNode.children).indexOf(divContenedor) + 1;
-                let posicionDestino = Array.from(divDestino.parentNode.children).indexOf(divDestino) + 1;
-                
-                if (!invitado) {
-                    /* fetch('/actualizar-posicion-consola', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ 
-                            posicion_origen: posicionOrigen,
-                            posicion_destino: posicionDestino
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    }); */
-                }
 
                 console.log('Consola movida a una casilla vacía.');
             }
@@ -548,9 +338,9 @@ function mostrarLogros() {
         if (consola.id <= nivelUsuario) {
             divLogros.innerHTML += `
                 <div class="infoConsola">
-                    <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
+                    <img src="${consola.ruta_imagen}" alt="imagen de consola" class="object-contain">
                     <div>
-                        <h2><b>${consola.nombre}</b></h2>
+                        <h1><b>${consola.nombre}</b></h1>
                         <p>${consola.descripcion}</p>
                     </div>
                 </div>
@@ -567,10 +357,10 @@ function mostrarTienda() {
         divTienda.style.flexDirection = 'column';
         divTienda.style.alignItems = 'center';
         divTienda.innerHTML = '<button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>';
-        divTienda.innerHTML += '<div>Dinero disponible: $' + abreviarNumero(dineroActual) + '</div>';
+        divTienda.innerHTML += '<div>Tokens disponibles: ' + abreviarNumero(dineroActual) + '</div>';
 
-        const precioBase = 100; // Precio base inicial
-        const factorCrecimiento = 1.5; // Factor de crecimiento exponencial
+        const precioBase = 100;
+        const factorCrecimiento = 1.5;
 
         consolas.forEach((consola, indice) => {
             if (consola.id > 1 && consola.id < nivelUsuario - 1) {
@@ -578,7 +368,7 @@ function mostrarTienda() {
                 const precioAbreviado = abreviarNumero(precio);
                 divTienda.innerHTML += `
                     <div class="divCompra w-70">
-                        <div class="flex items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4" style="width: 50%;">
+                        <div class="flex items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4" style="width: 70%;">
                             <img src="${consola.ruta_imagen}" alt="imagen de consola" class="w-20 h-20 sm:w-34 sm:h-34">
                             <h2>${consola.nombre}</h2>
                         </div>
@@ -609,23 +399,29 @@ function mostrarConfirmacion() {
 }
 
 function reiniciarJuego() {
-    fetch('/reiniciar-juego', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = '/index';
-        } else {
-            alert('Error al reiniciar el juego');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-    
+    dineroActual = 0;
+    nivelUsuario = 1;
+    grilla.innerHTML = '';
+
+    if (!invitado) {
+        fetch('/reiniciar-juego', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Juego reiniciado');
+                window.location.reload();
+            } else {
+                alert('Error al reiniciar el juego');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }  
 }
 
 function ocultarContenedor(boton) {
@@ -654,12 +450,11 @@ function abreviarNumero(numero) {
 
 // Función para actualizar los datos del usuario en el servidor
 function actualizarDatosUsuario(event) {
-    if (event) event.preventDefault(); // Detiene el envío del formulario si es una llamada de cierre de sesión
+    if (event) event.preventDefault();
 
     let datosUsuario = {
         dinero: dineroActual,
         nivel: nivelUsuario,
-        n_casillas: grilla.children.length,
         consolas: []
     };
 

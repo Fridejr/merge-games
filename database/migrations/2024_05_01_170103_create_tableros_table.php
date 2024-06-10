@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tableros', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->integer('n_casillas')->default(15);
+            $table->integer('n_casillas')->default(18);
             $table->timestamps();
         });
     }
