@@ -38,6 +38,7 @@ class TableroResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('n_casillas'),
                 Tables\Columns\TextColumn::make('created_at')
             ])
             ->filters([

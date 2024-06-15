@@ -79,13 +79,16 @@ class IndexController extends Controller
     //Funcion para reiniciar la partida de jugador, reestabliendo los valores iniciales y eliminando sus consolas
     public function reiniciarJuego() {
         try {
+            //Obtener el ID del usuario autenticado
             $userId = Auth::id();
 
+            //Reestablecer los valores iniciales
             $user = User::find($userId);
             $user->dinero = 0;
             $user->nivel = 1;
             $user->save();
 
+            //Obtener el tablero del usuario y eliminar las consolas que este tenga
             $tablero = Tablero::where('user_id', $userId)->first();
             $tablero->n_casillas = 18;
             $tablero->save();

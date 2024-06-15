@@ -78,7 +78,7 @@ setInterval(() => {
             mostrarDinero.style.position = 'absolute';
             mostrarDinero.style.left = `${coordenadas.left + window.scrollX}px`;
             mostrarDinero.style.top = `${coordenadas.top + window.scrollY}px`;
-            mostrarDinero.innerHTML = `+<img src='images/moneda.png' alt='img'> ${dinero % 1 === 0 ? dinero : dinero.toFixed(2)}`;
+            mostrarDinero.innerHTML = `+<img src='images/moneda.png' alt='img'> ${abreviarNumero(dinero)}`;
             
             document.body.appendChild(mostrarDinero);
         }
@@ -358,7 +358,7 @@ function mostrarTienda() {
         divTienda.style.flexDirection = 'column';
         divTienda.style.alignItems = 'center';
         divTienda.innerHTML = '<button onclick="ocultarContenedor(this)" class="p-2 px-4">X</button>';
-        divTienda.innerHTML += '<div>Tokens disponibles: ' + abreviarNumero(dineroActual) + '</div>';
+        divTienda.innerHTML += '<div>Champiñones disponibles: ' + abreviarNumero(dineroActual) + '</div>';
 
         const precioBase = 100;
         const factorCrecimiento = 1.5;

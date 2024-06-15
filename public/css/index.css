@@ -8,6 +8,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    margin: 0.8%;
 }
 
 #dropdownMenu {
@@ -49,9 +50,7 @@ img {
     padding-top: 5%;
     padding-bottom: 4%;
     color: white;
-    /* display: grid;
-    grid-template-columns: 1;
-    grid-template-rows: 30vh, 75%, 15%; */
+    margin-top: 0.6vw;
 }
 
 .casilla {
@@ -69,7 +68,7 @@ img {
 .casilla img {
     animation: caida 0.3s ease-in-out;
     cursor: grab;
-    width: 90%;
+    width: 65%;
     
 }
 
@@ -85,7 +84,8 @@ img {
 }
 
 .datos {
-    font-size: 1.1em;
+    font-size: 1vw;
+
 }
 
 .botones {
@@ -243,6 +243,7 @@ img {
     height: fit-content;
     display: flex;
     justify-content: center;
+    align-items: center;
     color: white;
     font-size: 0.7vw;
     margin-left: 2%;
@@ -272,7 +273,7 @@ img {
     width: fit-content;
     padding: 7px;
     border-radius: 50px;
-    background-color: rgba(128, 128, 128, 0.573);
+    background-color: rgba(255, 255, 255, 0.678);
 
     img {
         width: 30px;
@@ -326,16 +327,16 @@ img {
         font-size: 0.7em;
     }
 
-    .datos {
+    /* .datos {
         font-size: 0.8em;
-    }
+    } */
 }
 
-@media (max-width: 800px) {
+/* @media (max-width: 800px) {
     .datos {
         font-size: 0.6em;
     }
-}
+} */
 
 @media (max-width: 640px) {
     #divLogros, #divInfoConsola, #divTienda {
@@ -350,4 +351,5 @@ img {
         width: 30vw;
         font-size: 2vw;
     }
+
 }

@@ -17,6 +17,7 @@ class TableroSeeder extends Seeder
         //crear tablero para el usuario de id 3
         DB::table('tableros')->insert([
             'user_id' => 3,
+            'created_at' => now(),
         ]);
     }
 }

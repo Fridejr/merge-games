@@ -12,7 +12,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="relative">
-        <button id="menuButton" class="p-2 text-white rounded-lg mt-4 ml-4 focus:outline-none">
+        <button id="menuButton" class="p-2 text-white rounded-lg focus:outline-none">
             ☰
         </button>
         <div id="dropdownMenu" class="absolute left-0 mt-2 w-48  bg-white border border-gray-300 rounded-lg shadow-lg hidden text-center">
@@ -76,11 +76,11 @@
                     @endphp
 
                     @if ($consola)
-                        <div class="casilla bg-transparent p-3 text-center">
+                        <div class="casilla bg-transparent text-center">
                             <img src="{{ asset($consola->ruta_imagen) }}" alt="img" {{-- class="w-full h-full object-contain" --}}>
                         </div>
                     @else
-                        <div class="casilla bg-transparent p-2 text-center"></div>
+                        <div class="casilla bg-transparent text-center"></div>
                     @endif
                 @endfor
             </div>

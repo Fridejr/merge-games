@@ -56,12 +56,6 @@
                                 <button type="submit" class="btn text-white">
                                     {{ __('Login') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link text-orange" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
                             </div>
                         </div>
                     </form>
@@ -71,28 +65,3 @@
     </div>
 </div>
 @endsection
-
-<style>
-    .bg-orange {
-        background-color: #FF851B;
-    }
-
-    .border-orange {
-        border-color: #FF851B;
-    }
-
-    .btn-orange {
-        background-color: #FF851B;
-        border-color: #FF851B;
-        color: #fff;
-    }
-
-    .btn-orange:hover {
-        background-color: #e07b1a;
-        border-color: #e07b1a;
-    }
-
-    .text-orange {
-        color: #FF851B;
-    }
-</style>
