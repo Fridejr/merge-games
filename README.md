@@ -6,6 +6,28 @@
 Videojuego creado como trabajo de fin de grado por Antonio Toro Romero.
 
 
+## Requisitos pre-instalación
+
+Yo he usado las siguientes herramientas y versiones
+- PHP v8.2.4
+- MySQL v8
+- Apache 
+- composer v2.7.2
+- nodejs v20.10.0 (npm v9.8.1)
+
+Es posible que para instalar composer se deba modificar el archivo C:\xampp\php\php.ini y descomentar las siguientes lineas: 
+    extension=curl
+    extension=fileinfo
+    extension=gd
+    extension=gettext
+    extension=intl
+    extension=mbstring
+    extension=exif
+    extension=mysqli
+    extension=pdo_mysql
+    extension=pdo_sqlite
+
+
 ## Instalación
 
 1. **Clona el Repositorio:**
@@ -20,6 +42,16 @@ Videojuego creado como trabajo de fin de grado por Antonio Toro Romero.
 3. **Configura el Entorno:**
     - Copia el archivo `.env.example` y renómbralo a `.env`.
     - Configura la base de datos y otros detalles en el archivo `.env`.
+
+    Lineas a editar: 
+        APP_URL=http://localhost:8000
+
+        DB_CONNECTION=mysql {u otro que prefieras usar}
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE={nombre de la bbdd que desees}
+        DB_USERNAME=root{nombre se usuario en caso que se desee}
+        DB_PASSWORD=
 
 4. **Genera Clave de Aplicación:**
     ```bash

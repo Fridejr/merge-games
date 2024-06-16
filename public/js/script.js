@@ -6,6 +6,7 @@ const divDineroQueGenera = document.querySelector('.divDineroQueGenera');
 const textoContador = document.querySelector('.contador p');
 const grilla = document.querySelector('.grilla');
 
+//Mostrar el dinero del usuario
 let dineroActual = parseFloat(divDinero.innerText.replace(/[^0-9.-]+/g, ""));
 if (dineroActual > 0) {
     divDinero.innerText = abreviarNumero(dineroActual);
@@ -16,16 +17,7 @@ if (dineroActual > 0) {
 
 dineroQueGenera();
 
-const rutasImagenes = consolas.map(consola => consola.ruta_imagen);
-precargarImagenes(rutasImagenes);
-
-function precargarImagenes(rutas) {
-    rutas.forEach(ruta => {
-        const img = new Image();
-        img.src = ruta;
-    });
-}
-
+//Añadir la lógica de clic al contador
 divContador.addEventListener('click', (event) => {
     event.preventDefault();
     if (contador < 10) {
@@ -34,6 +26,8 @@ divContador.addEventListener('click', (event) => {
     }
 });
 
+//Un intervalo para aumentar el contador cada segundo
+//Cuando el contador llegue a 10, si hay hueco libre en el tablero, se crea una nueva consola llamando a la funcion nuevaConsola
 setInterval(() => {
     if (contador <= 10) {
         textoContador.innerText = contador;
@@ -54,6 +48,8 @@ setInterval(() => {
     contador++;
 }, 1000);
 
+//Intervalo de 3 segundos que sirve para generar el dinero de cada consola
+//Este se muestra por pantalla y se suma a la cantidad de dinero
 setInterval(() => {
     const divsDinero = document.querySelectorAll('.dinero');
     let dineroGenerado = 0;
@@ -101,6 +97,7 @@ setInterval(() => {
 
 }, 3000);
 
+//Funcion que calcula el dinero que genera cada 3 segundos, la cantidad se muestra en la parte superior de la pantalla
 function dineroQueGenera() {
     let dineroGenerado = 0;
     const casillas = document.querySelectorAll('.casilla');
@@ -129,16 +126,20 @@ function dineroQueGenera() {
 }
 
 
+//Funcion que obtiene el id de la consola a partir de la ruta de la imagen
 function obtenerIdConsola(src) {
     const consola = consolas.find(consola => src.endsWith(consola.ruta_imagen));
     return consola ? consola.id : 0;
 }
 
+//Funcion que obtiene la ruta de la imagen de la consola a partir del id
 function obtenerRutaImagenConsola(id) {
     const consola = consolas.find(consola => consola.id === id);
     return consola ? consola.ruta_imagen : "/images/nes.png";
 }
 
+//Funcion que se utiliza para añadir consolas al tablero
+//Puede ser una consola de nivel 1 generada por el contador, o una de nivel superior comprada en la tienda
 function nuevaConsola(id = null, precio = null) {
     const casillas = document.querySelectorAll('.casilla');
     let casillasLibres = Array.from(casillas).filter(casilla => !casilla.querySelector('img'));
@@ -156,14 +157,14 @@ function nuevaConsola(id = null, precio = null) {
                 const nuevoDinero = dineroActual - precio;
                 const divTienda = document.getElementById('divTienda');
                 divTienda.style.display = 'none';
-                console.log(dineroActual, nuevoDinero);
                 dineroActual = nuevoDinero;
                 divDinero.innerText = abreviarNumero(nuevoDinero);
             }
 
         } else {
+            //Indicar al usuario que no tiene dinero suficiente
             mensaje = document.createElement('div');
-            mensaje.innerHTML = '<div class="mensaje"><img src="/images/warning.png"> Dinero insuficiente.</div>';
+            mensaje.innerHTML = '<div class="mensaje"><img src="/images/warning.png"> Champiñones insuficientes.</div>';
             document.body.appendChild(mensaje);
 
             setTimeout(() => {
@@ -174,6 +175,7 @@ function nuevaConsola(id = null, precio = null) {
         dineroQueGenera();
 
     } else {
+        //Indicar al usuario que no hay casillas libres en el tablero
         mensaje = document.createElement('div');
         mensaje.innerHTML = '<div class="mensaje"><img src="/images/warning.png"> No hay casillas libres.</div>';
         document.body.appendChild(mensaje);
@@ -184,6 +186,7 @@ function nuevaConsola(id = null, precio = null) {
     }
 }
 
+//Funcion que se utiliza para mostrar informacion de una consola. Es llamada cuando el jugaddor consigue una consola nueva
 function mostrarNuevaConsola(id) {
     consolas.forEach(consola => {
         if (consola.id === id) {
@@ -200,8 +203,9 @@ function mostrarNuevaConsola(id) {
     })
 }
 
-function pruebas(id_consola) {
-    const n_casillas = grilla.children.length;
+
+//Funcion que comprueba si la consola es nueva, si esta lo es, se aumenta el nivel del usuario y se llama a la funcion mostrarNuevaConsola
+function aumentarNivel(id_consola) {
 
     if (id_consola > nivelUsuario) {
         // Actualizar el nivel del usuario
@@ -212,12 +216,30 @@ function pruebas(id_consola) {
     }
 }
 
+//Parametros necesarios para arrastrar las consolas
 let dragging = false;
 let draggedElement = null;
 let originalWidth = null;
 let originalHeight = null;
 let casillasCoords = [];
 
+//Obtener las coordenadas de todas las casillas, y de esta forma despues poder detectar donde se ha soltado la consola
+function obtenerCoordenadasCasillas() {
+    casillasCoords = [];
+    const casillas = document.querySelectorAll('.casilla');
+    casillas.forEach((casilla) => {
+        const rect = casilla.getBoundingClientRect();
+        const coords = {
+            top: rect.top + window.scrollY,
+            left: rect.left + window.scrollX,
+            bottom: rect.bottom + window.scrollY,
+            right: rect.right + window.scrollX
+        };
+        casillasCoords.push(coords);
+    });
+}
+
+//Detectar cuando se selecciona una consola para poder comenzar el evento mousemove
 document.addEventListener('mousedown', (event) => {
     if (event.target.tagName === 'IMG') {
         if (event.target.parentElement.classList.contains('casilla')) {
@@ -234,6 +256,7 @@ document.addEventListener('mousedown', (event) => {
     }
 });
 
+//Una vez se tiene una consola seleccionada, hacer que esta siga el movimiento del cursor
 document.addEventListener('mousemove', (event) => {
     if (dragging && draggedElement) {
         draggedElement.style.position = 'absolute';
@@ -242,21 +265,10 @@ document.addEventListener('mousemove', (event) => {
     }
 });
 
-function obtenerCoordenadasCasillas() {
-    casillasCoords = [];
-    const casillas = document.querySelectorAll('.casilla');
-    casillas.forEach((casilla) => {
-        const rect = casilla.getBoundingClientRect();
-        const coords = {
-            top: rect.top + window.scrollY,
-            left: rect.left + window.scrollX,
-            bottom: rect.bottom + window.scrollY,
-            right: rect.right + window.scrollX
-        };
-        casillasCoords.push(coords);
-    });
-}
-
+//Detecta cuando se suelta la consola y comprueba varias opciones
+//Si la consola se suelta en una casilla vacía, mueve la consola a la casilla
+//Si la consola se suelta en la casilla de otra consola diferente, intercambia las posiciones de las consolas
+//Si la consola se suelta en la casilla de una consola igual, se elimina una y se aumenta el nivel de la otra
 document.addEventListener('mouseup', (event) => {
     if (dragging) {
         const mouseX = event.pageX;
@@ -280,18 +292,15 @@ document.addEventListener('mouseup', (event) => {
             if (imagenCasilla && draggedElement.src.toLowerCase() === imagenCasilla.src.toLowerCase() && obtenerIdConsola(imagenCasilla.src.toLowerCase()) !== ultimaConsola) {
                 // Obtener el ID de la consola actual y la siguiente consola
                 let idConsolaActual = obtenerIdConsola(imagenCasilla.src.toLowerCase());
-                let idConsolaSiguiente = idConsolaActual + 1;
-                console.log(idConsolaActual, idConsolaSiguiente);
-                    
+                let idConsolaSiguiente = idConsolaActual + 1;                    
                 let nuevaImagenSrc = obtenerRutaImagenConsola(idConsolaSiguiente);
 
                 // Actualizar la casilla de destino con la nueva consola
                 divDestino.innerHTML = `<img src="${nuevaImagenSrc}" alt="img">`;
                 divContenedor.innerHTML = '';
                 
-                pruebas(idConsolaSiguiente);
+                aumentarNivel(idConsolaSiguiente);
                 dineroQueGenera();
-                console.log('Son la misma consola, se combinan y se actualiza a la siguiente consola.');
                 
             } else if (imagenCasilla) {
                 let imagenOrigen = draggedElement.src;
@@ -303,7 +312,6 @@ document.addEventListener('mouseup', (event) => {
                 // Poner la imagen de la casilla destino en la casilla de la consola arrastrada
                 divContenedor.innerHTML = `<img src="${imagenDestino}" alt="img">`;
 
-                console.log('Son distintas consolas y se intercambian.');
                 
             } else {
                 // La casilla destino está vacía, mover la consola a esta posición
@@ -311,17 +319,14 @@ document.addEventListener('mouseup', (event) => {
                 divDestino.innerHTML = `<img src="${imagenOrigen}" alt="img">`;
                 divContenedor.innerHTML = '';
 
-                console.log('Consola movida a una casilla vacía.');
             }
 
-            console.log('El ratón fue soltado en la casilla:', casillaSoltada);
         } else {
             const nuevaImagen = document.createElement('img');
             nuevaImagen.src = draggedElement.src;
             nuevaImagen.alt = 'Imagen de consola';
             draggedElement.remove();
             divContenedor.appendChild(nuevaImagen);
-            console.log('El ratón fue soltado fuera de cualquier casilla o en la misma casilla.');
         }
 
         dragging = false;
@@ -329,7 +334,7 @@ document.addEventListener('mouseup', (event) => {
     }
 });
 
-
+//Funcion que sirve para mostrar el aparatado de logros. En este, se añade la informacion de todas las consolas que el jugador ya haya conseguido
 function mostrarLogros() {
     divLogros = document.getElementById('divLogros');
     divLogros.style.display = 'block';
@@ -351,7 +356,9 @@ function mostrarLogros() {
     });
 }
 
+//Funcion que sirve para mostrar la tienda. Se añade las consolas que el jugador tiene opcion de comprar junto con un boton para esta accion
 function mostrarTienda() {
+    //solo mostrar si el jugador es nivel 4 o superior
     if (nivelUsuario > 3) {
         const divTienda = document.getElementById('divTienda');
         divTienda.style.display = 'flex';
@@ -365,6 +372,7 @@ function mostrarTienda() {
 
         consolas.forEach((consola, indice) => {
             if (consola.id > 1 && consola.id < nivelUsuario - 1) {
+                //calcular el precio de cada consola
                 const precio = precioBase * Math.pow(factorCrecimiento, indice) * consola.money * (nivelUsuario / 2);
                 const precioAbreviado = abreviarNumero(precio);
                 divTienda.innerHTML += `
@@ -383,6 +391,7 @@ function mostrarTienda() {
         });
 
     } else {
+        //mostrar mensaje si el jugadore todavia no puede acceder a la tienda
         mensaje = document.createElement('div');
         mensaje.innerHTML = '<div class="mensaje"><img src="/images/warning.png"> Todavia no puedes acceder a la tienda.</div>';
         document.body.appendChild(mensaje);
@@ -394,11 +403,13 @@ function mostrarTienda() {
     
 }
 
+//Sirve para comfirma el reinicio del juego por si el jugador cambio de idea
 function mostrarConfirmacion() {
     const divConfirmacion = document.getElementById('divConfirmacion');
     divConfirmacion.style.display = 'flex';
 }
 
+//Funcion que hace una peticion POST al servidor para reiniciar el juego y los datos del usuario
 function reiniciarJuego() {
     dineroActual = 0;
     nivelUsuario = 1;
@@ -415,7 +426,6 @@ function reiniciarJuego() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Juego reiniciado');
                 window.location.reload();
             } else {
                 alert('Error al reiniciar el juego');
@@ -425,11 +435,13 @@ function reiniciarJuego() {
     }  
 }
 
+//Funcion para ocultar diferentes contenedores
 function ocultarContenedor(boton) {
     divPadre = boton.parentNode;
     divPadre.style.display = 'none';
 }
 
+//evento para cerrar los contenedores sin necesidad de hacer clic en el boton
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         document.getElementById('divInfoConsola').style.display = 'none';
@@ -439,6 +451,7 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+//Abreviar numeros grandes para que no haya problemas con su longitud
 function abreviarNumero(numero) {
     const unidades = ['', 'k', 'M', 'B', 'T'];
     const orden = Math.floor(Math.log10(Math.abs(numero)) / 3);
@@ -446,7 +459,6 @@ function abreviarNumero(numero) {
 
     return `${abreviado.toFixed(2)}${unidades[orden]}`;
 }
-
 
 
 // Función para actualizar los datos del usuario en el servidor
@@ -488,7 +500,6 @@ function actualizarDatosUsuario(event) {
             return response.json();
         })
         .then(data => {
-            console.log('Datos actualizados:', data);
             if (event) {
                 document.getElementById('logout-form').submit();
             }
@@ -506,14 +517,16 @@ function actualizarDatosUsuario(event) {
     }
 }
 
+//Cada 5 minutos se actualizan los datos del usuario por si se produce algun error
 setInterval(() => {
     actualizarDatosUsuario();
 }, 300000);
 
+
+//Detecta cuando se cierrao se reinicia la ventana para actualizar los datos del jugador
 window.addEventListener('beforeunload', (event) => {
     actualizarDatosUsuario();
 });
-
 window.addEventListener('unload', (event) => {
     actualizarDatosUsuario();
 });

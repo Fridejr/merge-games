@@ -77,7 +77,7 @@
 
                     @if ($consola)
                         <div class="casilla bg-transparent text-center">
-                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img" {{-- class="w-full h-full object-contain" --}}>
+                            <img src="{{ asset($consola->ruta_imagen) }}" alt="img">
                         </div>
                     @else
                         <div class="casilla bg-transparent text-center"></div>
@@ -106,7 +106,6 @@
             Tu progreso actual se perderá.
         </h2>
         <div class="flex gap-4">
-            {{-- recargar la pagina si cancela --}}
             <button onclick="window.location.href='{{ route('index') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                 Cancelar
             </button>
@@ -130,7 +129,6 @@
         //Exportar el nivel para poder usarlo en el script
         var nivelUsuario = {{ $nivel }};
         const consolas = @json($consolas);
-        console.log(invitado);
 
         const menuButton = document.getElementById('menuButton');
         const dropdownMenu = document.getElementById('dropdownMenu');

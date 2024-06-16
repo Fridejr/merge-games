@@ -32,10 +32,6 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-image: url('../images/estrella.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center; */
     border-radius: 15px;
 }
 
@@ -171,7 +167,7 @@ img {
 
 
 #divLogros::-webkit-scrollbar, #divInfoConsola::-webkit-scrollbar, #divTienda::-webkit-scrollbar, #divConfirmacion::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
+    display: none;
 }
 
 #divLogros button, #divInfoConsola button, #divTienda button {
@@ -326,17 +322,7 @@ img {
     #divTienda {
         font-size: 0.7em;
     }
-
-    /* .datos {
-        font-size: 0.8em;
-    } */
 }
-
-/* @media (max-width: 800px) {
-    .datos {
-        font-size: 0.6em;
-    }
-} */
 
 @media (max-width: 640px) {
     #divLogros, #divInfoConsola, #divTienda {
