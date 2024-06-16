@@ -36,11 +36,15 @@
                 }
             }
 
+            h1 {
+                font-size: 2.5vw;
+            }
+
             .button {
                 display: inline-block;
                 margin: 10px;
                 padding: 10px 20px;
-                font-size: 16px;
+                font-size: 1.4vw;
                 font-weight: 600;
                 text-align: center;
                 color: #fff;
@@ -70,7 +74,7 @@
             <div class="contenedor min-h-screen bg-gray-50 dark:bg-black">
                 <div class="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg flex items-center justify-center">
                     <img src="{{ asset('images/logo.png') }}" alt="logo">
-                    <h1 class="text-2xl font-semibold text-black dark:text-white mb-6 text-center">Bienvenido, ¿Qué desea hacer?</h1>
+                    <h1 class="font-semibold text-black dark:text-white mb-6 text-center">Bienvenido, ¿Qué desea hacer?</h1>
                     <div class="flex flex-col items-center">
                         <a href="{{ route('index') }}" class="button">Entrar como Invitado</a>
                         <a href="{{ route('login') }}" class="button">Iniciar Sesión</a>
