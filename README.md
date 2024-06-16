@@ -32,7 +32,7 @@ Es posible que para instalar composer se deba modificar el archivo C:\xampp\php\
 
 1. **Clona el Repositorio:**
     ```bash
-    git clone https://github.com/Fridejr/tfg.git
+    git clone https://github.com/Fridejr/merge-games.git
 
 2. **Instala Dependencias:**
     ```bash
