@@ -19,7 +19,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <!-- Custom Styles -->
-    <link href="css/login.css" rel="stylesheet">
+    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
