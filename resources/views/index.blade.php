@@ -24,7 +24,7 @@
                     <a href="/admin" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel de Aministrador</a>
                 @endrole
             @endif
-            <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" class="p-2" onsubmit="return actualizarDatosUsuario(event);"> 
+            <form id="logout-form" action="{{ secure_url('/admin/logout') }}" method="POST" class="p-2" onsubmit="return actualizarDatosUsuario(event);"> 
                 @csrf
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded flex w-full justify-center items-center">
                     <svg class="fi-btn-icon transition duration-75 h-5 w-5 text-white dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
